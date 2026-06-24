@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#151210">
   <title>Design Studio — SoulStone</title>
-  <link rel="stylesheet" href="css/style.css?v=20260624-luxe-finished-preview">
+  <link rel="stylesheet" href="css/style.css?v=20260624-p1-visual-upgrade">
 </head>
 <body>
   <div class="studio-layout">
     <!-- Canvas Area -->
     <div class="studio-canvas">
+      <div class="studio-top-note">
+        <span>Live custom preview</span>
+        <strong>Made-to-order bracelet</strong>
+      </div>
       <figure class="studio-material-photo">
         <img src="assets/generated/soulstone_macro_crystal_pearl.jpg" alt="Macro crystal, pearl, and silver material reference">
         <figcaption data-i18n-text="design_material_caption">Live material reference · crystal / pearl / silver</figcaption>
@@ -33,6 +37,13 @@
       <div class="price-display mt-2">
         <span class="price-big" id="price-display">$12.00</span>
         <span class="price-label" data-i18n-text="design_price_note">USD · incl. string & clasp</span>
+      </div>
+      <div class="studio-bottom-cta">
+        <div>
+          <span class="mini-label">Current direction</span>
+          <strong id="design-direction">Choose stones to begin</strong>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Review finished piece</button>
       </div>
     </div>
 
@@ -83,6 +94,13 @@
 
       <!-- Checkout -->
       <div class="panel-section" style="border-bottom: none;">
+        <div class="design-progress-card">
+          <div class="design-progress-copy">
+            <span class="mini-label">Design readiness</span>
+            <strong id="design-progress-label">0% complete</strong>
+          </div>
+          <div class="design-progress-track"><span id="design-progress-fill"></span></div>
+        </div>
         <button class="btn btn-primary" style="width: 100%;" onclick="simulateCheckout()" data-i18n-text="design_complete">
           Complete Design
         </button>
@@ -109,7 +127,7 @@
   </div>
 
   <script src="js/data.js?v=20260621-conversion-v5-clean-product"></script>
-  <script src="js/bracelet-renderer.js?v=20260624-luxe-finished-preview"></script>
+  <script src="js/bracelet-renderer.js?v=20260624-p1-visual-upgrade"></script>
   <script src="js/i18n.js?v=20260621-image2-i18n"></script>
   <script src="js/nav.js?v=20260621-image2-i18n"></script>
   <script>
@@ -237,6 +255,19 @@
       // Price
       const price = calculatePrice(currentStones);
       document.getElementById('price-display').textContent = `$${price.toFixed(2)}`;
+
+      // P1 conversion cues: make the workbench feel guided, not just configurable.
+      const requiredBeads = Math.min(selectedWrist.beadCount8mm, 13);
+      const progress = Math.min(100, Math.round((currentStones.length / requiredBeads) * 100));
+      const progressFill = document.getElementById('design-progress-fill');
+      const progressLabel = document.getElementById('design-progress-label');
+      const direction = document.getElementById('design-direction');
+      if (progressFill) progressFill.style.width = `${progress}%`;
+      if (progressLabel) progressLabel.textContent = isCompleteProduct ? 'Ready for order review' : `${progress}% complete`;
+      if (direction) {
+        const intent = selectedIntention ? localizeIntent(selectedIntention) : 'Custom ritual';
+        direction.textContent = currentStones.length ? `${intent} · ${currentStones.length} beads · $${price.toFixed(2)}` : 'Choose stones to begin';
+      }
 
       // Bead list — miniature work-in-progress tray
       const beadList = document.getElementById('bead-list');
