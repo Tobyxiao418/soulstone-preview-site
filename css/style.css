@@ -2839,3 +2839,197 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   .studio-bottom-cta .btn { width: 100%; }
   .mobile-sticky-review { padding: 0.64rem 0.72rem; }
 }
+
+
+/* ─── Product-manager iteration: ritual collection landing pages ─── */
+.ritual-page {
+  --ritual-glow: rgba(126,200,217,0.15);
+  --ritual-gem: #81d2df;
+}
+.ritual-page.ritual-love { --ritual-glow: rgba(232,180,200,0.18); --ritual-gem: #e9a9c1; }
+.ritual-page.ritual-protection { --ritual-glow: rgba(122,112,101,0.20); --ritual-gem: #4d4440; }
+.ritual-page.ritual-abundance { --ritual-glow: rgba(109,158,107,0.18); --ritual-gem: #75a96f; }
+
+.ritual-hero {
+  min-height: 84vh;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(circle at 74% 28%, var(--ritual-glow), transparent 42%),
+    radial-gradient(circle at 18% 70%, rgba(200,168,124,0.08), transparent 38%),
+    linear-gradient(180deg, #17120f 0%, #0f0c0a 100%);
+}
+
+.ritual-hero-grid,
+.ritual-material-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.72fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.ritual-hero h1 {
+  font-size: clamp(3.2rem, 6.8vw, 6rem);
+  letter-spacing: -0.04em;
+  max-width: 760px;
+}
+
+.ritual-preview-card {
+  position: relative;
+  min-height: 440px;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  border-radius: 38px;
+  border: 1px solid rgba(255,246,228,0.10);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255,246,228,0.08), transparent 42%),
+    radial-gradient(circle at 50% 34%, var(--ritual-glow), transparent 55%),
+    linear-gradient(145deg, #2a231b, #15100d 72%);
+  box-shadow: 0 38px 110px rgba(0,0,0,0.44), inset 0 1px 0 rgba(255,255,255,0.055);
+  overflow: hidden;
+}
+
+.ritual-preview-card::before {
+  content: '';
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  top: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 26%, rgba(255,255,255,0.62), transparent 13%), radial-gradient(circle, var(--ritual-gem), transparent 72%);
+  opacity: 0.18;
+  filter: blur(1px);
+}
+
+.ritual-bracelet-preview {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 450px);
+  min-height: 310px;
+  display: grid;
+  place-items: center;
+}
+
+.ritual-preview-caption {
+  position: absolute;
+  left: 1.2rem;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255,246,228,0.11);
+  border-radius: 999px;
+  background: rgba(18,14,10,0.50);
+  backdrop-filter: blur(16px);
+}
+
+.ritual-preview-caption span {
+  color: var(--color-accent-light);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.ritual-preview-caption small {
+  color: var(--color-text-dim);
+  text-align: right;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.ritual-story-section {
+  background: #151210;
+}
+
+.ritual-story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.ritual-story-card,
+.ritual-stone-list article {
+  border: 1px solid rgba(255,246,228,0.09);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255,246,228,0.045), rgba(0,0,0,0.08)), rgba(37,33,24,0.36);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
+}
+
+.ritual-story-card {
+  min-height: 280px;
+  padding: 1.25rem;
+}
+
+.ritual-story-card h2 {
+  font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+  margin-bottom: 0.8rem;
+}
+
+.ritual-story-card p,
+.ritual-stone-list span {
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+
+.ritual-material-section {
+  background:
+    radial-gradient(circle at 80% 10%, var(--ritual-glow), transparent 36%),
+    #1d1813;
+}
+
+.ritual-stone-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.ritual-stone-list article {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  column-gap: 0.75rem;
+  row-gap: 0.2rem;
+  align-items: center;
+  padding: 0.82rem;
+}
+
+.ritual-stone-list article > div {
+  grid-row: span 2;
+}
+
+.ritual-stone-list strong {
+  color: var(--color-cream);
+  font-size: 0.9rem;
+}
+
+.ritual-cta-section {
+  background: #151210;
+}
+
+@media (max-width: 900px) {
+  .ritual-hero { min-height: auto; padding-top: 4rem; }
+  .ritual-hero-grid,
+  .ritual-material-grid,
+  .ritual-story-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .ritual-hero h1 { font-size: clamp(2.8rem, 14vw, 4.5rem); }
+  .ritual-preview-card { min-height: 380px; }
+  .ritual-preview-caption { flex-direction: column; align-items: flex-start; border-radius: 22px; }
+  .ritual-preview-caption small { text-align: left; }
+  .ritual-story-card { min-height: 0; }
+}
+
+@media (max-width: 560px) {
+  .ritual-preview-card { min-height: 330px; padding: 0.65rem; border-radius: 28px; }
+  .ritual-bracelet-preview { min-height: 245px; }
+  .ritual-stone-list { grid-template-columns: 1fr; text-align: left; }
+}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#151210">
+  <title>SoulStone Ritual — Intention Collection</title>
+  <link rel="stylesheet" href="css/style.css?v=20260624-pm-ritual-pages">
+</head>
+<body>
+  <main id="ritual-page" class="ritual-page">
+    <section class="ritual-hero section">
+      <div class="container ritual-hero-grid">
+        <div class="ritual-hero-copy">
+          <p class="eyebrow" id="ritual-eyebrow">SoulStone Ritual</p>
+          <h1 id="ritual-title">Design by intention.</h1>
+          <p class="subtitle" id="ritual-subtitle">Choose a feeling. Build a piece around it.</p>
+          <p class="hero-body" id="ritual-body">Each ritual page turns one emotional need into a clearer product story, material direction and design starting point.</p>
+          <div class="hero-actions">
+            <a id="ritual-design-cta" href="design.html" class="btn btn-primary btn-lg">Start this design</a>
+            <a href="trust.html" class="btn btn-secondary btn-lg">Materials & Trust</a>
+          </div>
+          <div class="hero-trust-row" id="ritual-tags"></div>
+        </div>
+        <div class="ritual-preview-card">
+          <div id="ritual-bracelet" class="ritual-bracelet-preview"></div>
+          <div class="ritual-preview-caption">
+            <span id="ritual-preview-name">Signature preview</span>
+            <small id="ritual-preview-materials">crystal · pearl · silver</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ritual-story-section">
+      <div class="container ritual-story-grid">
+        <article class="ritual-story-card">
+          <p class="eyebrow">Who it is for</p>
+          <h2 id="ritual-who-title">For a clear customer moment.</h2>
+          <p id="ritual-who-body"></p>
+        </article>
+        <article class="ritual-story-card">
+          <p class="eyebrow">Gift angle</p>
+          <h2 id="ritual-gift-title">A reason to give.</h2>
+          <p id="ritual-gift-body"></p>
+        </article>
+        <article class="ritual-story-card">
+          <p class="eyebrow">Content hook</p>
+          <h2 id="ritual-hook-title">A short-video hook.</h2>
+          <p id="ritual-hook-body"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section ritual-material-section">
+      <div class="container ritual-material-grid">
+        <div>
+          <p class="eyebrow">Material direction</p>
+          <h2 id="ritual-material-title">The stones should make the feeling visible.</h2>
+          <p class="section-heading-note" id="ritual-material-note"></p>
+        </div>
+        <div id="ritual-stone-list" class="ritual-stone-list"></div>
+      </div>
+    </section>
+
+    <section class="section ritual-cta-section">
+      <div class="container text-center">
+        <p class="eyebrow">Ready to customize</p>
+        <h2 id="ritual-final-title">Start from this ritual, then make it yours.</h2>
+        <p class="subtitle" id="ritual-final-subtitle">Adjust stones, wrist size and story before order preview.</p>
+        <div class="hero-actions justify-center mt-4">
+          <a id="ritual-bottom-design-cta" href="design.html" class="btn btn-primary btn-lg">Open Design Studio</a>
+          <a href="index.html" class="btn btn-secondary btn-lg">Explore other intentions</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js?v=20260621-conversion-v5-clean-product"></script>
+  <script src="js/bracelet-renderer.js?v=20260624-pm-ritual-pages"></script>
+  <script src="js/i18n.js?v=20260621-image2-i18n"></script>
+  <script src="js/nav.js?v=20260624-pm-ritual-pages"></script>
+  <script>
+    initPage('home');
+
+    const RITUALS = {
+      calm: {
+        className: 'calm', presetId: 'ocean-calm', label: 'Calm Ritual', title: 'For quiet focus and softer days.',
+        subtitle: 'Ocean-toned crystals and pearls for reset, sleep, and emotional steadiness.',
+        body: 'Calm is the entry point for people who want the bracelet to feel like a private pause — something they can wear during work, travel, bedtime routines, or a stressful season.',
+        tags: ['sleep reset', 'soft blue palette', 'ocean calm', 'gift for overwhelm'],
+        stones: ['aquamarine','aquamarine','freshwater-pearl','moonstone','aquamarine','freshwater-pearl','silver-bead','aquamarine','moonstone','freshwater-pearl','aquamarine','silver-bead','aquamarine'],
+        previewName: 'Ocean Calm', materials: 'aquamarine · moonstone · freshwater pearl · silver',
+        whoTitle: 'For someone who needs the day to slow down.',
+        whoBody: 'This is the clearest route for shoppers searching for stress relief, sleep routines, study focus, soft self-care, or a gentle gift for someone going through a lot.',
+        giftTitle: 'A quiet “I hope you feel held” gift.',
+        giftBody: 'The gift story is not loud romance; it is care, steadiness and emotional presence. It works for friends, partners, daughters, mothers and self-gifting.',
+        hookTitle: '“Design a bracelet for the week you need peace.”',
+        hookBody: 'Best short-video angles: nightstand ritual, ocean light, before/after stress day, ASMR bead selection, story card reveal.',
+        materialTitle: 'Cool translucent stones, pearl softness, silver air.',
+        materialNote: 'Use light-catching blue and white materials. Avoid heavy dark contrast in this collection; the value is softness and breath.'
+      },
+      love: {
+        className: 'love', presetId: 'soft-love', label: 'Love Ritual', title: 'For tenderness, care, and meaningful gifting.',
+        subtitle: 'Rose quartz and pearl tones for self-love, friendship, birthdays and soft romance.',
+        body: 'Love should feel gentle rather than cliché: a wearable reminder of care, warmth and emotional permission.',
+        tags: ['self-love', 'birthday gift', 'soft pink palette', 'friendship token'],
+        stones: ['rose-quartz','freshwater-pearl','rose-quartz','moonstone','silver-bead','rose-quartz','freshwater-pearl','rose-quartz','moonstone','freshwater-pearl','rose-quartz','silver-bead','rose-quartz'],
+        previewName: 'Soft Love', materials: 'rose quartz · pearl · moonstone · silver',
+        whoTitle: 'For someone learning to be gentler with themselves.',
+        whoBody: 'This route fits self-care shoppers, gift buyers, friendship rituals and emotionally warm birthday moments.',
+        giftTitle: 'A better-than-generic “thinking of you” gift.',
+        giftBody: 'The story card makes the gift feel considered: why these colors, why these stones, why this person.',
+        hookTitle: '“Build a self-love bracelet for your best friend.”',
+        hookBody: 'Best content angles: gift box reveal, choosing stones for her personality, pink/pearl macro shots, message card close-up.',
+        materialTitle: 'Soft rose, luminous pearl, gentle moonlight.',
+        materialNote: 'Keep this collection tactile and feminine without making it childish. Pearl and moonstone help elevate rose quartz.'
+      },
+      protection: {
+        className: 'protection', presetId: 'grounded-protection', label: 'Protection Ritual', title: 'For grounding, boundaries, and everyday strength.',
+        subtitle: 'Smoky quartz, obsidian and silver details for a darker, steadier piece.',
+        body: 'Protection is for shoppers who want the bracelet to feel strong, minimal and wearable every day — not mystical costume jewelry.',
+        tags: ['grounding', 'boundaries', 'dark neutral palette', 'everyday strength'],
+        stones: ['smoky-quartz','obsidian','silver-bead','smoky-quartz','obsidian','smoky-quartz','silver-bead','obsidian','smoky-quartz','obsidian','silver-bead','smoky-quartz','obsidian'],
+        previewName: 'Grounded Protection', materials: 'smoky quartz · obsidian · silver',
+        whoTitle: 'For people who want quiet armor.',
+        whoBody: 'This is the cleanest unisex route: boundaries, focus, travel, work pressure and personal reset after a chaotic season.',
+        giftTitle: 'A “you’ve got this” gift.',
+        giftBody: 'The emotional angle is strength without drama: a grounded piece someone can actually wear with black, denim, neutrals and daily outfits.',
+        hookTitle: '“Design a bracelet for stronger boundaries.”',
+        hookBody: 'Best content angles: black stone macro, silver detail shots, workday reset, packing/travel ritual, clean dark styling.',
+        materialTitle: 'Deep smoke, black polish, restrained silver.',
+        materialNote: 'Keep the surface premium and minimal. The product should read strong and wearable, not spooky or novelty.'
+      },
+      abundance: {
+        className: 'abundance', presetId: 'abundance-ritual', label: 'Abundance Ritual', title: 'For new chapters, growth, and receiving more.',
+        subtitle: 'Green aventurine and citrine tones for opportunity, gratitude and momentum.',
+        body: 'Abundance is the optimistic route: launch season, new job, creator milestones, business goals, gratitude and receiving.',
+        tags: ['new chapter', 'career gift', 'creator milestone', 'green + gold palette'],
+        stones: ['green-aventurine','citrine','freshwater-pearl','green-aventurine','citrine','silver-bead','green-aventurine','freshwater-pearl','citrine','green-aventurine','silver-bead','citrine','green-aventurine'],
+        previewName: 'Abundance Ritual', materials: 'green aventurine · citrine · pearl · silver',
+        whoTitle: 'For someone stepping into a bigger season.',
+        whoBody: 'This collection works for new jobs, creators, founders, students, graduation, launches and personal growth moments.',
+        giftTitle: 'A “new chapter” gift with optimism.',
+        giftBody: 'The story card frames the bracelet around growth and gratitude instead of making unrealistic promises about money or luck.',
+        hookTitle: '“Design a bracelet for your next chapter.”',
+        hookBody: 'Best content angles: morning planning, desk ritual, launch countdown, creator milestone gift, green/gold material close-up.',
+        materialTitle: 'Fresh green, golden light, grounded pearl.',
+        materialNote: 'Avoid overclaiming prosperity. The product story should be momentum, growth and gratitude — symbolic, not financial promise.'
+      }
+    };
+
+    function initRitualPage() {
+      const params = new URLSearchParams(window.location.search);
+      const key = RITUALS[params.get('intent')] ? params.get('intent') : 'calm';
+      const r = RITUALS[key];
+      document.getElementById('ritual-page').classList.add(`ritual-${r.className}`);
+      document.title = `${r.label} — SoulStone`;
+      document.getElementById('ritual-eyebrow').textContent = r.label;
+      document.getElementById('ritual-title').textContent = r.title;
+      document.getElementById('ritual-subtitle').textContent = r.subtitle;
+      document.getElementById('ritual-body').textContent = r.body;
+      document.getElementById('ritual-preview-name').textContent = r.previewName;
+      document.getElementById('ritual-preview-materials').textContent = r.materials;
+      document.getElementById('ritual-who-title').textContent = r.whoTitle;
+      document.getElementById('ritual-who-body').textContent = r.whoBody;
+      document.getElementById('ritual-gift-title').textContent = r.giftTitle;
+      document.getElementById('ritual-gift-body').textContent = r.giftBody;
+      document.getElementById('ritual-hook-title').textContent = r.hookTitle;
+      document.getElementById('ritual-hook-body').textContent = r.hookBody;
+      document.getElementById('ritual-material-title').textContent = r.materialTitle;
+      document.getElementById('ritual-material-note').textContent = r.materialNote;
+      document.getElementById('ritual-design-cta').href = `design.html?preset=${r.presetId}`;
+      document.getElementById('ritual-bottom-design-cta').href = `design.html?preset=${r.presetId}`;
+      document.getElementById('ritual-tags').innerHTML = r.tags.map(tag => `<span>${tag}</span>`).join('');
+      document.getElementById('ritual-stone-list').innerHTML = [...new Set(r.stones)].map(id => {
+        const stone = getStoneById(id);
+        if (!stone) return '';
+        return `<article><div>${renderBeadMini(id)}</div><strong>${stone.name}</strong><span>$${stone.price.toFixed(1)} · ${stone.texture || 'stone'}</span></article>`;
+      }).join('');
+      renderBracelet(document.getElementById('ritual-bracelet'), r.stones, { width: 430, height: 300, beadSize: 17, animated: false, completed: true, productMode: true });
+    }
+
+    initRitualPage();
+  </script>
+</body>
+</html>
