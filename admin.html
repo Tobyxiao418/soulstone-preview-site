@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#151210">
+  <title>Admin — Order Preview — SoulStone</title>
+  <link rel="stylesheet" href="css/style.css?v=20260621-conversion-v5-clean-product">
+</head>
+<body>
+  <div class="container">
+    <section class="section">
+      <div class="fade-in">
+        <p class="eyebrow">Preview your finished bracelet</p>
+        <h1 style="font-size: clamp(1.5rem, 3vw, 1.75rem);">Your <span class="text-accent">SoulStone</span> Order</h1>
+        <p class="subtitle mb-3">Review the finished piece, story card, price, and gift-ready details before checkout.</p>
+
+        <div class="text-center mb-3">
+          <span class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Prototype mode — no live Shopify connection
+          </span>
+        </div>
+
+        <div id="admin-content">
+          <div class="card text-center" style="padding: 3rem;">
+            <p class="text-muted" style="font-size: 0.95rem;">No order data found.</p>
+            <p class="text-dim mt-2" style="font-size: 0.84rem;">Go to the <a href="design.html" style="color: var(--color-accent);">Design Studio</a> and complete a design to generate an order preview.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/data.js?v=20260621-conversion-v5-clean-product"></script>
+  <script src="js/bracelet-renderer.js?v=20260621-conversion-v5-clean-product"></script>
+  <script src="js/i18n.js?v=20260621-image2-i18n"></script>
+  <script src="js/nav.js?v=20260621-image2-i18n"></script>
+  <script>
+    initPage('admin');
+
+    const orderData = localStorage.getItem('soulstone_last_order');
+
+    if (orderData) {
+      const order = JSON.parse(orderData);
+      renderAdmin(order);
+    }
+
+    function renderAdmin(order) {
+      const content = document.getElementById('admin-content');
+      const poetry = order.design_poetry || generateDesignPoetry(order.stones, order.intention);
+
+      // Build BOM rows
+      const bomRows = order.stone_summary.map(s => `
+        <div class="admin-row">
+          <span class="label">${s.stone} (${s.id}) × ${s.count}</span>
+          <span class="value">$${(s.unit_price * s.count).toFixed(2)}</span>
+        </div>
+      `).join('');
+
+      // Simulated Shopify Draft Order payload
+      const shopifyPayload = {
+        draft_order: {
+          line_items: [
+            {
+              title: `Custom Bracelet — ${order.intention || 'Custom'}`,
+              variant_title: `${order.bead_count} beads · ${order.wrist_size.label}`,
+              quantity: 1,
+              price: order.total_price.toFixed(2),
+              properties: [
+                { name: 'Design ID', value: order.design_id },
+                { name: 'Intention', value: order.intention || 'Custom' },
+                { name: 'Wrist Size', value: order.wrist_size.label },
+                { name: 'Bead Count', value: String(order.bead_count) },
+                { name: 'Stone Composition', value: order.stone_summary.map(s => `${s.stone}×${s.count}`).join(', ') },
+              ],
+            },
+          ],
+          note: `SoulStone Custom Design\nDesign ID: ${order.design_id}\nIntention: ${order.intention}\nStory Card: ${order.story_card_text}`,
+          tags: `soulstone, custom, ${(order.intention || '').toLowerCase()}`,
+          note_attributes: [
+            { name: 'design_id', value: order.design_id },
+            { name: 'story_card_text', value: order.story_card_text },
+          ],
+        },
+      };
+
+      content.innerHTML = `
+        <div class="order-finished-hero">
+          <div id="admin-finished-bracelet" class="order-finished-bracelet"></div>
+          <div class="order-finished-copy">
+            <p class="eyebrow">Finished Design</p>
+            <h2>${poetry.title}</h2>
+            <p class="checkout-subtitle">${poetry.subtitle}</p>
+            <p>${poetry.body}</p>
+            <div class="order-price-line">
+              <span>Made to order</span>
+              <strong>$${order.total_price.toFixed(2)}</strong>
+            </div>
+            <div class="conversion-pill-row" aria-label="Order value highlights">
+              <span>Finished preview</span>
+              <span>Natural stones</span>
+              <span>Story Card included</span>
+              <span>Gift-ready ritual</span>
+            </div>
+            <small>${poetry.cta}</small>
+            <div class="order-primary-actions">
+              <a href="design.html" class="btn btn-secondary">Adjust Design</a>
+              <button class="btn btn-primary" onclick="saveDesignRequest()">Save This Bracelet</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2" style="align-items: start;">
+          <div>
+            <!-- Design Info -->
+            <div class="admin-section">
+              <h3>Design Details</h3>
+              <div class="admin-row"><span class="label">Design ID</span><span class="value">${order.design_id}</span></div>
+              <div class="admin-row"><span class="label">Intention</span><span class="value">${order.intention || 'Not set'}</span></div>
+              <div class="admin-row"><span class="label">Wrist Size</span><span class="value">${order.wrist_size.label} (${order.wrist_size.cm}cm)</span></div>
+              <div class="admin-row"><span class="label">Bead Count</span><span class="value">${order.bead_count}</span></div>
+              <div class="admin-row"><span class="label">Created</span><span class="value">${new Date(order.created_at).toLocaleString()}</span></div>
+            </div>
+
+            <!-- BOM -->
+            <div class="admin-section">
+              <h3>Bill of Materials</h3>
+              ${bomRows}
+              <div class="admin-row" style="border-top: 1px solid var(--color-border); padding-top: 0.5rem; margin-top: 0.5rem;">
+                <span class="label">String & Clasp (base)</span>
+                <span class="value">$${order.base_price.toFixed(2)}</span>
+              </div>
+              <div class="admin-row" style="font-weight: 600; font-size: 1rem;">
+                <span class="label">Total</span>
+                <span class="value" style="color: var(--color-accent);">$${order.total_price.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <!-- Story Card -->
+            <div class="admin-section">
+              <h3>Story Card Text</h3>
+              <p style="font-style: italic; color: var(--color-text-muted); font-size: 0.84rem; line-height: 1.7; font-family: var(--font-display);">
+                ${order.story_card_text || 'No story generated.'}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <!-- Bracelet Preview -->
+            <div class="admin-section">
+              <h3>Bracelet Preview</h3>
+              <div id="admin-bracelet" style="width: 280px; height: 280px; margin: 0 auto;"></div>
+            </div>
+
+            <!-- Bead Sequence -->
+            <div class="admin-section">
+              <h3>Bead Sequence</h3>
+              <div class="flex gap-1 flex-wrap">
+                ${order.stones.map((id, i) => {
+                  const s = getStoneById(id);
+                  return s ? `<button class="composition-bead" title="${i+1}. ${s.name}" aria-label="${i+1}. ${s.name}">${renderBeadMini(id)}</button>` : '';
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Developer Payload -->
+            <details class="admin-section developer-payload">
+              <summary>Developer payload · simulated Shopify draft order</summary>
+              <p class="text-dim" style="font-size:0.78rem; margin:0.75rem 0 1rem;">Hidden by default so the order page stays customer-facing. Use this only for implementation handoff.</p>
+              <div class="admin-json">${JSON.stringify(shopifyPayload, null, 2)}</div>
+            </details>
+          </div>
+        </div>
+
+        <div class="flex gap-1 mt-3 flex-wrap order-bottom-actions">
+          <button class="btn btn-primary" onclick="saveDesignRequest()">Save This Bracelet</button>
+          <a href="design.html" class="btn btn-secondary">Back to Design Studio</a>
+          <button class="btn btn-secondary" onclick="copyPayload()">Copy Developer JSON</button>
+        </div>
+      `;
+
+      // Render bracelet
+      const heroBraceletEl = document.getElementById('admin-finished-bracelet');
+      if (heroBraceletEl) renderBracelet(heroBraceletEl, order.stones, { width: 430, height: 300, beadSize: 20.5, animated: false, completed: true, productMode: true });
+      const braceletEl = document.getElementById('admin-bracelet');
+      renderBracelet(braceletEl, order.stones, { width: 350, height: 240, beadSize: 17, animated: false, completed: true, productMode: true });
+
+      // Store the payload for copy
+      window._shopifyPayload = JSON.stringify(shopifyPayload, null, 2);
+      window._currentOrderDesignId = order.design_id;
+    }
+
+    function saveDesignRequest() {
+      const id = window._currentOrderDesignId || 'this bracelet';
+      alert(`Saved ${id} as a prototype request. In the live store, this button will continue to checkout or send the design to a jewelry specialist.`);
+    }
+
+    function copyPayload() {
+      if (window._shopifyPayload) {
+        navigator.clipboard.writeText(window._shopifyPayload).then(() => {
+          alert('Shopify Draft Order JSON copied to clipboard.');
+        }).catch(() => {
+          const el = document.querySelector('.admin-json');
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#151210">
+  <title>Find Your Energy — SoulStone Quiz</title>
+  <link rel="stylesheet" href="css/style.css?v=20260621-large-beads-cut-1">
+</head>
+<body>
+  <div class="container">
+    <section class="section">
+      <div class="quiz-container fade-in">
+        <div class="text-center mb-4">
+          <p class="eyebrow">Energy Quiz</p>
+          <h1 style="font-size: clamp(1.75rem, 4vw, 2.5rem);">Find Your <span class="text-accent">Energy</span></h1>
+          <p class="subtitle">Three questions. One bracelet. Your ritual.</p>
+        </div>
+
+        <div class="quiz-progress" id="quiz-progress"></div>
+        <div id="quiz-body"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/data.js?v=20260621-image-beads-order"></script>
+  <script src="js/bracelet-renderer.js?v=20260621-large-beads-cut-1"></script>
+  <script src="js/i18n.js?v=20260621-image2-i18n"></script>
+  <script src="js/nav.js?v=20260621-image2-i18n"></script>
+  <script>
+    initPage('quiz');
+
+    const QUESTIONS = [
+      {
+        question: 'Right now, what feels most true?',
+        options: [
+          { text: 'I want to feel more connected — to myself or someone I love.', scores: { Love: 3, Calm: 1 } },
+          { text: 'I\'m building something and need clear focus.', scores: { Clarity: 3, Abundance: 1 } },
+          { text: 'I feel overwhelmed and need to slow down.', scores: { Calm: 3, Protection: 1 } },
+          { text: 'I want to attract new opportunities.', scores: { Abundance: 3, Clarity: 1 } },
+        ],
+      },
+      {
+        question: 'When you imagine your ideal morning, what do you reach for first?',
+        options: [
+          { text: 'A warm drink, soft music, journaling.', scores: { Calm: 2, Love: 2 } },
+          { text: 'A plan, a list, a clear sense of direction.', scores: { Clarity: 3 } },
+          { text: 'Movement — stretching, walking, breathing space.', scores: { Protection: 2, Calm: 1 } },
+          { text: 'Inspiration — a podcast, a book, new ideas.', scores: { Abundance: 2, Clarity: 1 } },
+        ],
+      },
+      {
+        question: 'Choose the color palette that draws you in.',
+        options: [
+          { text: 'Soft pink, pearlescent white, moonlight.', scores: { Love: 3 } },
+          { text: 'Ocean blue-green, seafoam, mist.', scores: { Calm: 3 } },
+          { text: 'Gold, lemon, sunlit amber.', scores: { Clarity: 2, Abundance: 2 } },
+          { text: 'Deep charcoal, smoky earth, obsidian.', scores: { Protection: 3 } },
+        ],
+      },
+    ];
+
+    let currentQ = 0;
+    let answers = [];
+    let scores = { Love: 0, Abundance: 0, Calm: 0, Protection: 0, Clarity: 0 };
+
+    function renderQuiz() {
+      // Progress dots
+      const progress = document.getElementById('quiz-progress');
+      progress.innerHTML = QUESTIONS.map((_, i) =>
+        `<div class="dot ${i <= currentQ ? 'active' : ''}"></div>`
+      ).join('');
+
+      const body = document.getElementById('quiz-body');
+
+      if (currentQ >= QUESTIONS.length) {
+        showResult();
+        return;
+      }
+
+      const q = QUESTIONS[currentQ];
+      body.innerHTML = `
+        <div class="fade-in">
+          <h2 class="quiz-question">${q.question}</h2>
+          <div class="quiz-options">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="selectAnswer(${i})">${opt.text}</button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function selectAnswer(optIndex) {
+      const q = QUESTIONS[currentQ];
+      const opt = q.options[optIndex];
+
+      Object.entries(opt.scores).forEach(([k, v]) => {
+        scores[k] = (scores[k] || 0) + v;
+      });
+
+      answers.push(optIndex);
+      currentQ++;
+      renderQuiz();
+    }
+
+    function showResult() {
+      const topIntention = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      const preset = PRESETS.find(p => p.intention === topIntention) || PRESETS[0];
+
+      const body = document.getElementById('quiz-body');
+      body.innerHTML = `
+        <div class="quiz-result fade-in">
+          <div class="material-divider"></div>
+          <p class="text-muted mb-1" style="font-size: 0.85rem;">Your energy signature points to</p>
+          <h2 class="preset-name">${preset.name}</h2>
+          <p class="subtitle">${preset.tagline}</p>
+
+          <div id="result-bracelet" style="width: 280px; height: 280px; margin: 2rem auto;"></div>
+
+          <p class="text-muted" style="max-width: 400px; margin: 0 auto 2rem; font-size: 0.88rem; line-height: 1.7;">
+            ${preset.description}
+          </p>
+
+          <div class="story-card" style="max-width: 420px; margin: 0 auto 2rem; text-align: left;">
+            <h4>Your Energy Story</h4>
+            <p>${preset.story}</p>
+          </div>
+
+          <div class="flex gap-1 justify-center flex-wrap">
+            <a href="design.html?preset=${preset.id}" class="btn btn-primary btn-lg">Customize This Design</a>
+            <button class="btn btn-secondary" onclick="resetQuiz()">Retake Quiz</button>
+          </div>
+
+          <div class="mt-4">
+            <p class="panel-label mb-1">Your Scores</p>
+            <div class="flex gap-1 justify-center flex-wrap">
+              ${Object.entries(scores).sort((a, b) => b[1] - a[1]).map(([k, v]) =>
+                `<span class="chip" style="pointer-events:none;"><span class="chip-dot" style="background: ${INTENTION_COLORS[k]}"></span>${k}: ${v}</span>`
+              ).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Render the bracelet preview
+      const braceletEl = document.getElementById('result-bracelet');
+      renderBracelet(braceletEl, preset.stones, { width: 280, height: 280, beadSize: 18 });
+    }
+
+    function resetQuiz() {
+      currentQ = 0;
+      answers = [];
+      scores = { Love: 0, Abundance: 0, Calm: 0, Protection: 0, Clarity: 0 };
+      renderQuiz();
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>

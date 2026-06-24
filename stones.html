@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#151210">
+  <title>Stone Library — SoulStone</title>
+  <link rel="stylesheet" href="css/style.css?v=20260621-large-beads-cut-1">
+</head>
+<body>
+  <div class="container">
+    <section class="section">
+      <div class="text-center mb-4 fade-in">
+        <p class="eyebrow">Materials</p>
+        <h1>Stone <span class="text-accent">Library</span></h1>
+        <p class="subtitle">Every stone has a character. Learn what calls to you.</p>
+      </div>
+
+      <!-- Filter -->
+      <div class="flex gap-1 justify-center flex-wrap mb-3" id="stone-filters">
+        <button class="chip active" onclick="filterStones('all', this)">All Stones</button>
+      </div>
+
+      <div id="stone-library" class="grid-2"></div>
+    </section>
+  </div>
+
+  <script src="js/data.js?v=20260621-image-beads-order"></script>
+  <script src="js/i18n.js?v=20260621-image2-i18n"></script>
+  <script src="js/nav.js?v=20260621-image2-i18n"></script>
+  <script>
+    initPage('stones');
+
+    // Build filters
+    const filtersEl = document.getElementById('stone-filters');
+    INTENTIONS.forEach(intent => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.innerHTML = `<span class="chip-dot" style="background: ${INTENTION_COLORS[intent]}"></span>${intent}`;
+      btn.onclick = () => filterStones(intent, btn);
+      filtersEl.appendChild(btn);
+    });
+
+    function filterStones(filter, activeBtn) {
+      // Update active chip
+      filtersEl.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const library = document.getElementById('stone-library');
+      library.innerHTML = '';
+
+      const filtered = filter === 'all'
+        ? STONES
+        : STONES.filter(s => s.intention.includes(filter));
+
+      filtered.forEach(stone => {
+        const intentionChips = stone.intention.length > 0
+          ? stone.intention.map(i => `<span class="chip" style="pointer-events:none; font-size: 0.68rem; padding: 0.25rem 0.6rem; min-height: auto;"><span class="chip-dot" style="background: ${INTENTION_COLORS[i]}; width: 6px; height: 6px;"></span>${i}</span>`).join('')
+          : '<span class="chip" style="pointer-events:none; font-size: 0.68rem; padding: 0.25rem 0.6rem; min-height: auto;">Accent</span>';
+
+        const card = document.createElement('div');
+        card.className = 'card stone-card fade-in';
+        card.innerHTML = `
+          <div class="stone-sphere" style="background: ${stone.gradient};"></div>
+          <div class="stone-info">
+            <h3>${stone.name}</h3>
+            <div class="stone-meta">
+              ${stone.size}mm · ${stone.texture} · ${stone.origin} · $${stone.price.toFixed(2)}/bead
+            </div>
+            <p class="stone-desc">${stone.description}</p>
+            <div class="stone-intentions">${intentionChips}</div>
+            <a href="design.html" class="btn btn-secondary btn-sm mt-2" style="font-size: 0.72rem;">Use in Design Studio</a>
+          </div>
+        `;
+        library.appendChild(card);
+      });
+    }
+
+    // Initial render
+    filterStones('all', filtersEl.querySelector('.chip'));
+  </script>
+</body>
+</html>

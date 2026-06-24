@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#151210">
+  <title>Design Studio — SoulStone</title>
+  <link rel="stylesheet" href="css/style.css?v=20260624-luxe-finished-preview">
+</head>
+<body>
+  <div class="studio-layout">
+    <!-- Canvas Area -->
+    <div class="studio-canvas">
+      <figure class="studio-material-photo">
+        <img src="assets/generated/soulstone_macro_crystal_pearl.jpg" alt="Macro crystal, pearl, and silver material reference">
+        <figcaption data-i18n-text="design_material_caption">Live material reference · crystal / pearl / silver</figcaption>
+      </figure>
+      <div id="bracelet-canvas" class="bracelet-container"></div>
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat">
+          <div class="stat-value" id="stat-beads">0</div>
+          <div class="stat-label" data-i18n-text="design_beads">Beads</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-size">17cm</div>
+          <div class="stat-label" data-i18n-text="design_wrist">Wrist</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-bead-size">8mm</div>
+          <div class="stat-label" data-i18n-text="design_bead_size">Bead Size</div>
+        </div>
+      </div>
+      <div class="price-display mt-2">
+        <span class="price-big" id="price-display">$12.00</span>
+        <span class="price-label" data-i18n-text="design_price_note">USD · incl. string & clasp</span>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="studio-panel">
+      <!-- Intention -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_intention">Intention</div>
+        <div id="intention-select" class="flex gap-1 flex-wrap"></div>
+      </div>
+
+      <!-- Wrist Size -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_wrist_size">Wrist Size</div>
+        <div id="wrist-select" class="flex gap-1 flex-wrap"></div>
+      </div>
+
+      <!-- Preset Quick Select -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_presets">Quick Start — Presets</div>
+        <div id="preset-select" class="flex gap-1 flex-wrap"></div>
+      </div>
+
+      <!-- Stone Picker -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_add">Add Stones</div>
+        <div id="stone-picker" class="stone-grid"></div>
+        <div class="flex gap-1 mt-2">
+          <button class="btn btn-secondary btn-sm" id="btn-undo" onclick="undoStone()" data-i18n-text="design_undo">Undo</button>
+          <button class="btn btn-secondary btn-sm" id="btn-clear" onclick="clearStones()" data-i18n-text="design_clear">Clear All</button>
+        </div>
+      </div>
+
+      <!-- Current Composition -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_composition">Current Composition</div>
+        <div id="bead-list" class="flex gap-1 flex-wrap" style="min-height: 24px;"></div>
+      </div>
+
+      <!-- Story Card -->
+      <div class="panel-section">
+        <div class="panel-label" data-i18n-text="design_story_label">Energy Story Card</div>
+        <div id="story-card" class="story-card">
+          <h4 data-i18n-text="design_story_title">Your Story</h4>
+          <p id="story-text" data-i18n-text="design_story_empty">Choose your intention and stones to generate your personal Energy Story Card.</p>
+        </div>
+      </div>
+
+      <!-- Checkout -->
+      <div class="panel-section" style="border-bottom: none;">
+        <button class="btn btn-primary" style="width: 100%;" onclick="simulateCheckout()" data-i18n-text="design_complete">
+          Complete Design
+        </button>
+        <div class="text-center mt-2">
+          <span class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n-text="design_proto">Prototype — no payment processed</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <h2>Order Summary</h2>
+      <div id="checkout-content"></div>
+      <div class="flex gap-1 mt-3">
+        <button class="btn btn-primary" onclick="viewInAdmin()">View in Admin</button>
+        <button class="btn btn-secondary" onclick="closeCheckout()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js?v=20260621-conversion-v5-clean-product"></script>
+  <script src="js/bracelet-renderer.js?v=20260624-luxe-finished-preview"></script>
+  <script src="js/i18n.js?v=20260621-image2-i18n"></script>
+  <script src="js/nav.js?v=20260621-image2-i18n"></script>
+  <script>
+    initPage('design');
+
+    // State
+    let selectedIntention = null;
+    let selectedWrist = WRIST_SIZES[1]; // default M
+    let currentStones = [];
+    let designId = generateDesignId();
+
+    // Parse URL params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('intention')) {
+      selectedIntention = params.get('intention');
+    }
+    if (params.get('preset')) {
+      const preset = PRESETS.find(p => p.id === params.get('preset'));
+      if (preset) {
+        selectedIntention = preset.intention;
+        currentStones = [...preset.stones];
+      }
+    }
+
+    // Render intention chips
+    const intentionSelect = document.getElementById('intention-select');
+    INTENTIONS.forEach(intent => {
+      const chip = document.createElement('button');
+      chip.className = `chip ${selectedIntention === intent ? 'active' : ''}`;
+      chip.innerHTML = `<span class="chip-dot" style="background: ${INTENTION_COLORS[intent]}"></span> ${localizeIntent(intent)}`;
+      chip.onclick = () => {
+        selectedIntention = intent;
+        renderAll();
+      };
+      intentionSelect.appendChild(chip);
+    });
+
+    // Render wrist size chips
+    const wristSelect = document.getElementById('wrist-select');
+    WRIST_SIZES.forEach(size => {
+      const chip = document.createElement('button');
+      chip.className = `chip ${size === selectedWrist ? 'active' : ''}`;
+      chip.textContent = localizeWristLabel(size.label);
+      chip.onclick = () => {
+        selectedWrist = size;
+        renderAll();
+      };
+      wristSelect.appendChild(chip);
+    });
+
+    // Render preset chips
+    const presetSelect = document.getElementById('preset-select');
+    PRESETS.forEach(preset => {
+      const chip = document.createElement('button');
+      chip.className = 'chip';
+      chip.textContent = localizePresetName(preset.name);
+      chip.onclick = () => {
+        selectedIntention = preset.intention;
+        currentStones = [...preset.stones];
+        designId = generateDesignId();
+        renderAll({ action: 'complete' });
+      };
+      presetSelect.appendChild(chip);
+    });
+
+    // Render stone picker
+    const stonePicker = document.getElementById('stone-picker');
+    STONES.forEach(stone => {
+      const btn = document.createElement('button');
+      btn.className = 'stone-pick';
+      btn.innerHTML = `
+        ${renderBeadMini(stone.id)}
+        <span class="name">${localizeStoneName(stone.name)}</span>
+        <span class="name text-dim">$${stone.price.toFixed(1)}</span>
+      `;
+      btn.onclick = () => addStone(stone.id);
+      stonePicker.appendChild(btn);
+    });
+
+    function addStone(id) {
+      if (currentStones.length >= selectedWrist.beadCount8mm + 3) return;
+      currentStones.push(id);
+      renderAll({ action: 'add', stoneId: id });
+    }
+
+    function undoStone() {
+      currentStones.pop();
+      renderAll({ action: 'remove' });
+    }
+
+    function clearStones() {
+      currentStones = [];
+      designId = generateDesignId();
+      renderAll({ action: 'clear' });
+    }
+
+    function renderAll(meta = {}) {
+      // Re-render intention chips
+      intentionSelect.querySelectorAll('.chip').forEach((chip, i) => {
+        chip.className = `chip ${INTENTIONS[i] === selectedIntention ? 'active' : ''}`;
+      });
+
+      // Re-render wrist chips
+      wristSelect.querySelectorAll('.chip').forEach((chip, i) => {
+        chip.className = `chip ${WRIST_SIZES[i] === selectedWrist ? 'active' : ''}`;
+      });
+
+      // Bracelet SVG
+      const canvas = document.getElementById('bracelet-canvas');
+      const isCompleteProduct = currentStones.length >= Math.min(selectedWrist.beadCount8mm, 13);
+      const size = isCompleteProduct ? Math.min(canvas.offsetWidth, 520) : Math.min(canvas.offsetWidth, 340);
+      const renderHeight = isCompleteProduct ? Math.min(canvas.offsetHeight, 360) : size;
+      canvas.classList.toggle('is-complete', isCompleteProduct);
+      if (meta.action === 'add' || meta.action === 'complete') {
+        canvas.classList.remove('stone-added');
+        void canvas.offsetWidth;
+        canvas.classList.add('stone-added');
+      }
+      renderBracelet(canvas, currentStones, { width: size, height: renderHeight, completed: isCompleteProduct, productMode: isCompleteProduct });
+
+      // Stats
+      document.getElementById('stat-beads').textContent = currentStones.length;
+      document.getElementById('stat-size').textContent = selectedWrist.label.split(' ')[0];
+
+      // Price
+      const price = calculatePrice(currentStones);
+      document.getElementById('price-display').textContent = `$${price.toFixed(2)}`;
+
+      // Bead list — miniature work-in-progress tray
+      const beadList = document.getElementById('bead-list');
+      beadList.innerHTML = currentStones.map((id, i) => {
+        const stone = getStoneById(id);
+        if (!stone) return '';
+        return `<button class="composition-bead" title="${localizeStoneName(stone.name)}" onclick="removeStone(${i})" aria-label="Remove ${localizeStoneName(stone.name)}">${renderBeadMini(id)}</button>`;
+      }).join('');
+
+      // Story card
+      if (currentStones.length > 0 && selectedIntention) {
+        const story = generateStoryCard(currentStones, selectedIntention);
+        document.getElementById('story-text').textContent = story;
+      } else {
+        document.getElementById('story-text').textContent = 'Choose your intention and stones to generate your personal Energy Story Card.';
+      }
+    }
+
+    function removeStone(index) {
+      currentStones.splice(index, 1);
+      renderAll({ action: 'remove' });
+    }
+
+    function getOrderPayload() {
+      const stoneCounts = {};
+      currentStones.forEach(id => {
+        stoneCounts[id] = (stoneCounts[id] || 0) + 1;
+      });
+
+      return {
+        design_id: designId,
+        intention: selectedIntention,
+        wrist_size: selectedWrist,
+        stones: currentStones,
+        stone_summary: Object.entries(stoneCounts).map(([id, count]) => {
+          const s = getStoneById(id);
+          return { stone: s.name, id, count, unit_price: s.price };
+        }),
+        bead_count: currentStones.length,
+        base_price: BASE_PRICE,
+        total_price: calculatePrice(currentStones),
+        story_card_text: selectedIntention ? generateStoryCard(currentStones, selectedIntention) : '',
+        design_poetry: generateDesignPoetry(currentStones, selectedIntention),
+        created_at: new Date().toISOString(),
+      };
+    }
+
+    function simulateCheckout() {
+      if (currentStones.length === 0) {
+        alert('Please add at least one stone to your bracelet.');
+        return;
+      }
+
+      const payload = getOrderPayload();
+      localStorage.setItem('soulstone_last_order', JSON.stringify(payload));
+
+      const modal = document.getElementById('checkout-modal');
+      const content = document.getElementById('checkout-content');
+
+      const bom = payload.stone_summary.map(s =>
+        `<div class="admin-row"><span class="label">${s.stone} ×${s.count}</span><span class="value">$${(s.unit_price * s.count).toFixed(2)}</span></div>`
+      ).join('');
+
+      content.innerHTML = `
+        <div class="checkout-product-preview">
+          <div id="checkout-bracelet" class="checkout-bracelet"></div>
+          <div class="checkout-copy">
+            <p class="eyebrow">Your finished piece</p>
+            <h3>${payload.design_poetry.title}</h3>
+            <p class="checkout-subtitle">${payload.design_poetry.subtitle}</p>
+            <p>${payload.design_poetry.body}</p>
+            <div class="checkout-price-cta">
+              <div>
+                <span class="checkout-price-label">Made to order</span>
+                <strong>$${payload.total_price.toFixed(2)}</strong>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="viewInAdmin()">Continue to Order Preview</button>
+            </div>
+            <div class="conversion-pill-row" aria-label="Order value highlights">
+              <span>Finished preview</span>
+              <span>Natural stones</span>
+              <span>Story Card included</span>
+              <span>Gift-ready ritual</span>
+            </div>
+          </div>
+        </div>
+        <div class="admin-section order-summary-compact" style="margin-bottom: 1rem;">
+          <div class="admin-row"><span class="label">Design ID</span><span class="value">${payload.design_id}</span></div>
+          <div class="admin-row"><span class="label">Intention</span><span class="value">${payload.intention || 'Not set'}</span></div>
+          <div class="admin-row"><span class="label">Wrist Size</span><span class="value">${payload.wrist_size.label}</span></div>
+          <div class="admin-row"><span class="label">Beads</span><span class="value">${payload.bead_count}</span></div>
+        </div>
+        <div class="admin-section" style="margin-bottom: 1rem;">
+          <h3 style="font-size: 0.85rem;">Bill of Materials</h3>
+          ${bom}
+          <div class="admin-row" style="border-top: 1px solid var(--color-border); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="label">String & Clasp</span><span class="value">$${BASE_PRICE.toFixed(2)}</span>
+          </div>
+          <div class="admin-row" style="font-size: 1rem;">
+            <span class="label" style="font-weight: 600;">Total</span>
+            <span class="value" style="color: var(--color-accent); font-size: 1.1rem;">$${payload.total_price.toFixed(2)}</span>
+          </div>
+        </div>
+        <div class="story-card">
+          <h4>Energy Story Card</h4>
+          <p>${payload.story_card_text}</p>
+          <small>${payload.design_poetry.cta}</small>
+        </div>
+      `;
+
+      const checkoutBracelet = document.getElementById('checkout-bracelet');
+      if (checkoutBracelet) renderBracelet(checkoutBracelet, payload.stones, { width: 330, height: 250, beadSize: 15.5, animated: false, completed: true, productMode: true });
+
+      modal.style.display = 'flex';
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkout-modal').style.display = 'none';
+    }
+
+    function viewInAdmin() {
+      closeCheckout();
+      window.location.href = 'admin.html';
+    }
+
+    // Initial render
+    renderAll();
+    document.addEventListener('soulstone:langchange', () => window.location.reload());
+  </script>
+</body>
+</html>
