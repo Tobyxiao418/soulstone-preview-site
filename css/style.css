@@ -2628,3 +2628,214 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   .studio-panel { padding-bottom: 6.5rem; }
   .modal-content { margin-bottom: 5rem; }
 }
+
+
+/* ─── P1 round 3: trust page + mobile studio tightening ─── */
+.trust-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(200,168,124,0.16), transparent 42%),
+    radial-gradient(circle at 12% 70%, rgba(126,200,217,0.07), transparent 38%),
+    linear-gradient(180deg, #17120f 0%, #0f0c0a 100%);
+}
+
+.trust-hero-grid,
+.faq-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.trust-hero h1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  letter-spacing: -0.035em;
+  max-width: 760px;
+}
+
+.trust-summary-card,
+.trust-pillar-card,
+.faq-list details,
+.launch-checklist-grid div {
+  border: 1px solid rgba(255,246,228,0.09);
+  background:
+    linear-gradient(180deg, rgba(255,246,228,0.045), rgba(0,0,0,0.08)),
+    rgba(37,33,24,0.38);
+  border-radius: 26px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.045);
+}
+
+.trust-summary-card {
+  padding: 1.5rem;
+}
+
+.trust-summary-card h3 {
+  margin: 0.6rem 0 0.65rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.trust-summary-card p,
+.trust-pillar-card p,
+.faq-list p {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 0.92rem;
+}
+
+.trust-pillars-section {
+  background: #151210;
+}
+
+.trust-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.trust-pillar-card {
+  min-height: 245px;
+  padding: 1.2rem;
+}
+
+.trust-pillar-card span {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.trust-pillar-card h3 {
+  margin: 0.65rem 0 0.5rem;
+  color: var(--color-cream);
+}
+
+.faq-section {
+  background:
+    radial-gradient(circle at 80% 0, rgba(232,180,200,0.05), transparent 36%),
+    #1d1813;
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.faq-list details {
+  padding: 1rem 1.1rem;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  color: var(--color-cream);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.faq-list p {
+  margin-top: 0.7rem;
+}
+
+.trust-launch-checklist {
+  background: #151210;
+}
+
+.launch-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.launch-checklist-grid div {
+  padding: 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.launch-checklist-grid strong {
+  color: var(--color-accent-light);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
+.launch-checklist-grid span {
+  color: var(--color-text-muted);
+  line-height: 1.65;
+  font-size: 0.88rem;
+}
+
+.proof-link-row {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(217,185,133,0.20);
+  background: rgba(200,168,124,0.08);
+  color: inherit;
+  text-decoration: none;
+}
+
+.proof-link-row strong { color: var(--color-accent-light); }
+.proof-link-row span { color: var(--color-cream-muted); }
+
+@media (max-width: 1024px) {
+  .trust-pillars-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+  .trust-hero-grid,
+  .faq-grid,
+  .launch-checklist-grid {
+    grid-template-columns: 1fr;
+  }
+  .trust-hero {
+    min-height: auto;
+    padding-top: 4rem;
+  }
+  .trust-hero h1 { font-size: clamp(2.7rem, 14vw, 4.4rem); }
+  .studio-canvas {
+    min-height: 640px;
+    padding-top: 0.95rem;
+  }
+  .studio-material-photo {
+    display: none;
+  }
+  .studio-top-note {
+    margin-bottom: 0.55rem;
+  }
+  .stats-bar {
+    order: 3;
+    margin-top: 0.55rem;
+  }
+  .price-display {
+    order: 4;
+  }
+  .studio-bottom-cta {
+    order: 5;
+  }
+  .studio-panel {
+    padding-top: 1rem;
+  }
+  .panel-section {
+    margin-bottom: 0.95rem;
+    padding-bottom: 0.95rem;
+  }
+  .stone-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .trust-pillars-grid,
+  .launch-checklist-grid { grid-template-columns: 1fr; }
+  .trust-pillar-card { min-height: auto; }
+  .proof-link-row { grid-template-columns: 1fr; }
+  .studio-canvas { min-height: 590px; }
+  .bracelet-container { width: min(300px, 92vw); height: 300px; }
+  .bracelet-container.is-complete { width: min(342px, 94vw); height: 250px; }
+  .studio-bottom-cta { padding: 0.72rem; }
+  .studio-bottom-cta .btn { width: 100%; }
+  .mobile-sticky-review { padding: 0.64rem 0.72rem; }
+}
