@@ -114,6 +114,14 @@
     </div>
   </div>
 
+  <div class="mobile-sticky-review" aria-label="Mobile design review shortcut">
+    <div>
+      <span class="mini-label">SoulStone Studio</span>
+      <strong id="mobile-review-summary">Start your design</strong>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Review</button>
+  </div>
+
   <!-- Checkout Modal -->
   <div id="checkout-modal" class="modal-overlay" style="display:none;">
     <div class="modal-content">
@@ -262,11 +270,15 @@
       const progressFill = document.getElementById('design-progress-fill');
       const progressLabel = document.getElementById('design-progress-label');
       const direction = document.getElementById('design-direction');
+      const mobileSummary = document.getElementById('mobile-review-summary');
       if (progressFill) progressFill.style.width = `${progress}%`;
       if (progressLabel) progressLabel.textContent = isCompleteProduct ? 'Ready for order review' : `${progress}% complete`;
       if (direction) {
         const intent = selectedIntention ? localizeIntent(selectedIntention) : 'Custom ritual';
         direction.textContent = currentStones.length ? `${intent} · ${currentStones.length} beads · $${price.toFixed(2)}` : 'Choose stones to begin';
+      }
+      if (mobileSummary) {
+        mobileSummary.textContent = currentStones.length ? `${currentStones.length} beads · $${price.toFixed(2)}` : 'Start your design';
       }
 
       // Bead list — miniature work-in-progress tray
