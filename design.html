@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#151210">
   <title>Design Studio — SoulStone</title>
-  <link rel="stylesheet" href="css/style.css?v=20260625-guided-design">
+  <link rel="stylesheet" href="css/style.css?v=20260625-luxe-product-v2">
 </head>
 <body>
   <div class="studio-layout">
@@ -43,7 +43,12 @@
           <span class="mini-label">Current direction</span>
           <strong id="design-direction">Choose stones to begin</strong>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Review finished piece</button>
+        <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Preview finished piece</button>
+      </div>
+      <div class="studio-operation-strip" aria-label="Design operations">
+        <span>Tap stone to add</span>
+        <span>Use tray arrows to reorder</span>
+        <span>Change bead size anytime</span>
       </div>
     </div>
 
@@ -59,6 +64,17 @@
       <div class="panel-section">
         <div class="panel-label" data-i18n-text="design_wrist_size">Wrist Size</div>
         <div id="wrist-select" class="flex gap-1 flex-wrap"></div>
+      </div>
+
+      <!-- Bead Size -->
+      <div class="panel-section bead-size-section">
+        <div class="panel-label">Bead Size</div>
+        <div class="bead-size-control" aria-label="Adjust bead size">
+          <button class="btn btn-secondary btn-sm" onclick="adjustBeadSize(-2)">−</button>
+          <strong id="bead-size-control-label">8mm</strong>
+          <button class="btn btn-secondary btn-sm" onclick="adjustBeadSize(2)">+</button>
+        </div>
+        <p class="control-hint">Smaller beads feel delicate; larger beads feel more like premium statement jewelry.</p>
       </div>
 
       <!-- Guided shopping paths -->
@@ -98,6 +114,7 @@
       <!-- Current Composition -->
       <div class="panel-section">
         <div class="panel-label" data-i18n-text="design_composition">Current Composition</div>
+        <p class="control-hint">Remove or move each bead. The finished preview will tighten the strand into a wearable bracelet.</p>
         <div id="bead-list" class="flex gap-1 flex-wrap" style="min-height: 24px;"></div>
       </div>
 
@@ -153,9 +170,9 @@
   </div>
 
   <script src="js/data.js?v=20260621-conversion-v5-clean-product"></script>
-  <script src="js/bracelet-renderer.js?v=20260625-guided-design"></script>
+  <script src="js/bracelet-renderer.js?v=20260625-luxe-product-v2"></script>
   <script src="js/i18n.js?v=20260621-image2-i18n"></script>
-  <script src="js/nav.js?v=20260625-guided-design"></script>
+  <script src="js/nav.js?v=20260625-luxe-product-v2"></script>
   <script>
     initPage('design');
 
@@ -167,6 +184,7 @@
     let selectedStoneFilter = 'recommended';
     let stoneSearchTerm = '';
     let selectedDesignPath = null;
+    let currentBeadSize = 8;
 
     // Parse URL params
     const params = new URLSearchParams(window.location.search);
@@ -340,7 +358,7 @@
     }
 
     function designNeededCount() {
-      return Math.min(selectedWrist.beadCount8mm, 13);
+      return Math.min(Math.max(10, Math.round(Math.min(selectedWrist.beadCount8mm, 13) * 8 / currentBeadSize)), 17);
     }
 
     function findMatchingPreset() {
@@ -390,6 +408,11 @@
         .slice(0, 3);
     }
 
+    function adjustBeadSize(delta) {
+      currentBeadSize = Math.max(6, Math.min(12, currentBeadSize + delta));
+      renderAll({ action: 'resize' });
+    }
+
     function addStone(id) {
       if (currentStones.length >= selectedWrist.beadCount8mm + 3) return;
       currentStones.push(id);
@@ -422,7 +445,7 @@
 
       // Bracelet SVG
       const canvas = document.getElementById('bracelet-canvas');
-      const isCompleteProduct = currentStones.length >= Math.min(selectedWrist.beadCount8mm, 13);
+      const isCompleteProduct = currentStones.length >= designNeededCount();
       const size = isCompleteProduct ? Math.min(canvas.offsetWidth, 520) : Math.min(canvas.offsetWidth, 340);
       const renderHeight = isCompleteProduct ? Math.min(canvas.offsetHeight, 360) : size;
       canvas.classList.toggle('is-complete', isCompleteProduct);
@@ -431,11 +454,14 @@
         void canvas.offsetWidth;
         canvas.classList.add('stone-added');
       }
-      renderBracelet(canvas, currentStones, { width: size, height: renderHeight, completed: isCompleteProduct, productMode: isCompleteProduct });
+      renderBracelet(canvas, currentStones, { width: size, height: renderHeight, beadSize: currentBeadSize + 14, completed: isCompleteProduct, productMode: isCompleteProduct });
 
       // Stats
       document.getElementById('stat-beads').textContent = currentStones.length;
       document.getElementById('stat-size').textContent = selectedWrist.label.split(' ')[0];
+      document.getElementById('stat-bead-size').textContent = `${currentBeadSize}mm`;
+      const beadSizeLabel = document.getElementById('bead-size-control-label');
+      if (beadSizeLabel) beadSizeLabel.textContent = `${currentBeadSize}mm`;
 
       // Price
       const price = calculatePrice(currentStones);
@@ -467,7 +493,12 @@
       beadList.innerHTML = currentStones.map((id, i) => {
         const stone = getStoneById(id);
         if (!stone) return '';
-        return `<button class="composition-bead" title="${localizeStoneName(stone.name)}" onclick="removeStone(${i})" aria-label="Remove ${localizeStoneName(stone.name)}">${renderBeadMini(id)}</button>`;
+        return `
+          <div class="composition-item" title="${localizeStoneName(stone.name)}">
+            <button class="composition-move" onclick="moveStone(${i}, -1)" aria-label="Move ${localizeStoneName(stone.name)} left" ${i === 0 ? 'disabled' : ''}>‹</button>
+            <button class="composition-bead" onclick="removeStone(${i})" aria-label="Remove ${localizeStoneName(stone.name)}">${renderBeadMini(id)}</button>
+            <button class="composition-move" onclick="moveStone(${i}, 1)" aria-label="Move ${localizeStoneName(stone.name)} right" ${i === currentStones.length - 1 ? 'disabled' : ''}>›</button>
+          </div>`;
       }).join('');
 
       // Story card
@@ -560,6 +591,15 @@
       `;
     }
 
+    function moveStone(index, direction) {
+      const next = index + direction;
+      if (next < 0 || next >= currentStones.length) return;
+      const copy = [...currentStones];
+      [copy[index], copy[next]] = [copy[next], copy[index]];
+      currentStones = copy;
+      renderAll({ action: 'reorder' });
+    }
+
     function removeStone(index) {
       currentStones.splice(index, 1);
       renderAll({ action: 'remove' });
@@ -581,6 +621,7 @@
           return { stone: s.name, id, count, unit_price: s.price };
         }),
         bead_count: currentStones.length,
+        bead_size_mm: currentBeadSize,
         base_price: BASE_PRICE,
         total_price: calculatePrice(currentStones),
         story_card_text: selectedIntention ? generateStoryCard(currentStones, selectedIntention) : '',
@@ -632,7 +673,7 @@
           <div class="admin-row"><span class="label">Design ID</span><span class="value">${payload.design_id}</span></div>
           <div class="admin-row"><span class="label">Intention</span><span class="value">${payload.intention || 'Not set'}</span></div>
           <div class="admin-row"><span class="label">Wrist Size</span><span class="value">${payload.wrist_size.label}</span></div>
-          <div class="admin-row"><span class="label">Beads</span><span class="value">${payload.bead_count}</span></div>
+          <div class="admin-row"><span class="label">Beads</span><span class="value">${payload.bead_count} · ${payload.bead_size_mm}mm</span></div>
         </div>
         <div class="admin-section" style="margin-bottom: 1rem;">
           <h3 style="font-size: 0.85rem;">Bill of Materials</h3>
@@ -653,7 +694,7 @@
       `;
 
       const checkoutBracelet = document.getElementById('checkout-bracelet');
-      if (checkoutBracelet) renderBracelet(checkoutBracelet, payload.stones, { width: 330, height: 250, beadSize: 15.5, animated: false, completed: true, productMode: true });
+      if (checkoutBracelet) renderBracelet(checkoutBracelet, payload.stones, { width: 360, height: 270, beadSize: currentBeadSize + 13, animated: false, completed: true, productMode: true });
 
       modal.style.display = 'flex';
     }

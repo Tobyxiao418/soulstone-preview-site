@@ -217,9 +217,11 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
   const cx = width / 2;
   const cy = height * 0.50;
   const productScale = Math.max(0.84, Math.min(width / 560, height / 370));
-  const rx = Math.min(width * 0.33, 176) * productScale;
-  const ry = Math.min(height * 0.235, 86) * productScale;
   const count = Math.max(1, stoneIds.length);
+  const nominalR = beadSize * 1.22 * productScale;
+  const strandCircumference = count * nominalR * 1.78;
+  const rx = Math.min(width * 0.34, Math.max(width * 0.20, strandCircumference / 5.25));
+  const ry = Math.min(height * 0.27, Math.max(height * 0.15, rx * 0.55));
 
   const beadCutPath = (id) => {
     if (typeof beadImagePath !== 'function') return '';
@@ -291,8 +293,8 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
   svg += `<rect x="0" y="0" width="${width}" height="${height}" rx="30" fill="#17110d"/>`;
   svg += `<rect x="18" y="16" width="${width - 36}" height="${height - 32}" rx="26" fill="#8f826d" opacity="0.30" filter="url(#finished-linen-grain)"/>`;
   svg += `<rect x="18" y="16" width="${width - 36}" height="${height - 32}" rx="26" fill="url(#finished-vignette)"/>`;
-  svg += `<ellipse cx="${cx}" cy="${cy + ry * 0.95}" rx="${rx * 0.92}" ry="${Math.max(18, ry * 0.25)}" fill="#050302" opacity="0.32" filter="url(#finished-contact-shadow)"/>`;
-  svg += `<path d="M ${cx - rx * 0.98} ${cy + 4} C ${cx - rx * 0.48} ${cy - ry * 1.10}, ${cx + rx * 0.48} ${cy - ry * 1.10}, ${cx + rx * 0.98} ${cy + 4} C ${cx + rx * 0.58} ${cy + ry * 1.08}, ${cx - rx * 0.58} ${cy + ry * 1.08}, ${cx - rx * 0.98} ${cy + 4}" fill="none" stroke="#f4e9d6" stroke-width="2.2" stroke-opacity="0.16"/>`;
+  svg += `<ellipse cx="${cx}" cy="${cy + ry * 0.95}" rx="${rx * 0.86}" ry="${Math.max(18, ry * 0.22)}" fill="#050302" opacity="0.30" filter="url(#finished-contact-shadow)"/>`;
+  svg += `<path d="M ${cx - rx * 0.96} ${cy + 4} C ${cx - rx * 0.48} ${cy - ry * 1.04}, ${cx + rx * 0.48} ${cy - ry * 1.04}, ${cx + rx * 0.96} ${cy + 4} C ${cx + rx * 0.56} ${cy + ry * 1.02}, ${cx - rx * 0.56} ${cy + ry * 1.02}, ${cx - rx * 0.96} ${cy + 4}" fill="none" stroke="#efe6d6" stroke-width="3.4" stroke-linecap="round" stroke-opacity="0.22"/>`;
 
   items.forEach((item, i) => {
     const { id, x, y, r, stone, rotate, opacity, front } = item;
@@ -327,7 +329,7 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
       svg += `<image href="${img}" x="${x-r*1.35}" y="${y-r*1.35}" width="${r*2.7}" height="${r*2.7}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.93"/>`;
       svg += `<ellipse cx="${x-r*.28}" cy="${y-r*.38}" rx="${r*.32}" ry="${r*.15}" fill="#fff" opacity="0.40" transform="rotate(-28 ${x} ${y})"/>`;
     }
-    svg += `<circle cx="${x}" cy="${y}" r="${r * 0.92}" fill="none" stroke="#fff" stroke-opacity="0.08" stroke-width="1"/>`;
+    svg += `<circle cx="${x}" cy="${y}" r="${r * 0.92}" fill="none" stroke="#fff" stroke-opacity="0.10" stroke-width="0.8"/>`;
     svg += `</g>`;
   });
 
