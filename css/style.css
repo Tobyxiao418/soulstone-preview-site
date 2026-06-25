@@ -4147,3 +4147,203 @@ h3 { font-size: 1.2rem; font-weight: 500; }
     border-radius: 24px;
   }
 }
+
+
+/* ─── Tea-mode final visual audit: customer-ready polish overrides ─── */
+:root {
+  --tea-glass: rgba(16, 12, 9, 0.58);
+  --tea-line: rgba(255, 246, 228, 0.105);
+  --tea-gold: rgba(226, 198, 151, 0.72);
+}
+
+body {
+  background:
+    radial-gradient(circle at 76% 4%, rgba(216,181,122,0.07), transparent 30%),
+    radial-gradient(circle at 18% 0%, rgba(126,200,217,0.035), transparent 26%),
+    #0d0a08;
+}
+
+.hero-product-carousel figcaption,
+.preset-material-ribbon,
+.studio-top-note,
+.stats-bar,
+.price-display,
+.studio-bottom-cta,
+.mobile-sticky-review {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.050), rgba(0,0,0,0.10)),
+    var(--tea-glass) !important;
+  border: 1px solid var(--tea-line) !important;
+  box-shadow: 0 18px 56px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.055) !important;
+}
+
+.hero-product-carousel,
+.photo-preset-card,
+.photo-tile,
+.gift-photo-card,
+.landing-product-photo,
+.product-reveal-preview.checkout-product-preview {
+  border: 1px solid rgba(226,203,164,0.18) !important;
+  box-shadow: 0 34px 90px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.055) !important;
+}
+
+.hero-product-photo,
+.preset-photo-wrap img,
+.landing-product-photo img,
+.photo-tile img,
+.gift-photo-card img {
+  filter: saturate(0.98) contrast(1.045) brightness(0.965);
+}
+
+.brand-promise-card,
+.conversion-proof-list div,
+.proof-link-row,
+.step,
+.decision-card,
+.story-card,
+.design-progress-card {
+  background:
+    linear-gradient(180deg, rgba(255,246,228,0.040), rgba(0,0,0,0.055)),
+    rgba(255,246,228,0.024) !important;
+  border-color: rgba(255,246,228,0.088) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.intention-landing-card {
+  border-color: rgba(255,246,228,0.10) !important;
+  background:
+    linear-gradient(180deg, rgba(255,246,228,0.035), rgba(0,0,0,0.06)),
+    #15110e !important;
+}
+
+.studio-layout {
+  background:
+    radial-gradient(circle at 42% 10%, rgba(226,198,151,0.08), transparent 34%),
+    #090706 !important;
+}
+
+.studio-canvas {
+  min-height: 100vh;
+  padding-top: clamp(1.25rem, 2.5vw, 2.2rem);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255,246,228,0.13), transparent 34%),
+    linear-gradient(180deg, rgba(12,9,7,0.08), rgba(12,9,7,0.74)),
+    url('../assets/generated/image2_threaded/soulstone_threaded_design_studio_atelier.png') center / cover no-repeat !important;
+}
+
+.studio-canvas::before {
+  background:
+    radial-gradient(circle at 50% 34%, rgba(255,248,232,0.20), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(0,0,0,0.10)) !important;
+  opacity: 0.44 !important;
+}
+
+.studio-panel {
+  background:
+    linear-gradient(180deg, rgba(255,246,228,0.045), rgba(0,0,0,0.02) 18%),
+    #120e0b !important;
+  border-left-color: rgba(255,246,228,0.09) !important;
+}
+
+.panel-section {
+  border-bottom-color: rgba(255,246,228,0.075) !important;
+}
+
+.panel-label,
+.mini-label,
+.stone-match-summary,
+.control-hint {
+  color: rgba(232,224,211,0.58) !important;
+}
+
+.stone-pick.material-pick {
+  min-height: 84px;
+  background:
+    linear-gradient(180deg, rgba(255,246,228,0.030), rgba(0,0,0,0.035)),
+    rgba(255,246,228,0.018) !important;
+  border-color: rgba(255,246,228,0.075) !important;
+}
+
+.stone-pick.material-pick:hover,
+.stone-pick.material-pick.is-recommended {
+  border-color: rgba(226,198,151,0.26) !important;
+  background:
+    radial-gradient(circle at 9% 18%, rgba(226,198,151,0.10), transparent 30%),
+    rgba(226,198,151,0.042) !important;
+}
+
+.material-thumb {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,0.08), transparent 28%),
+    rgba(0,0,0,0.16) !important;
+}
+
+.material-thumb .bead-mini {
+  width: 39px;
+  height: 39px;
+}
+
+.stone-filter-row .chip,
+#intention-select .chip,
+#wrist-select .chip,
+#preset-select .chip,
+.design-path-card {
+  background: rgba(255,246,228,0.026);
+  border-color: rgba(255,246,228,0.085);
+}
+
+.stone-filter-row .chip.active,
+#intention-select .chip.active,
+#wrist-select .chip.active,
+#preset-select .chip.active,
+.design-path-card.active {
+  background: rgba(226,198,151,0.105);
+  border-color: rgba(226,198,151,0.32);
+}
+
+.bracelet-container.is-complete::after {
+  display: block !important;
+  bottom: 0.35rem;
+  content: 'Drag beads to reorder exact sequence';
+  opacity: 0.78;
+}
+
+.luxe-finished-svg rect[fill="#17110d"] {
+  fill: #120d09;
+  opacity: 0.55;
+}
+
+.threaded-cord:not(.threaded-cord-shadow) {
+  stroke-opacity: 0.44;
+  stroke-width: 3.4px;
+}
+
+.threaded-cord-shadow {
+  stroke-opacity: 0.20;
+}
+
+.checkout-bracelet:not(.has-product-photo) {
+  width: min(100%, 620px) !important;
+  min-height: 390px !important;
+}
+
+.checkout-copy .natural-variation-note {
+  background: rgba(255,246,228,0.030);
+  border: 1px solid rgba(255,246,228,0.075);
+  border-radius: 18px;
+  padding: 0.85rem;
+}
+
+.order-summary-compact,
+.modal-content .admin-section:has(h3) {
+  opacity: 0.58;
+}
+
+@media (max-width: 860px) {
+  .studio-canvas { min-height: 760px; }
+  .studio-panel { border-left: none !important; }
+  .bracelet-container.is-complete::after { display: none !important; }
+}
