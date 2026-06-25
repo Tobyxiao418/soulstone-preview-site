@@ -4347,3 +4347,54 @@ body {
   .studio-panel { border-left: none !important; }
   .bracelet-container.is-complete::after { display: none !important; }
 }
+
+
+/* ─── Image2 hero upgrade: four distinct campaign/product styles ─── */
+.hero-product-carousel {
+  background:
+    radial-gradient(circle at 46% 30%, rgba(255,246,228,0.08), transparent 36%),
+    #0f0c09 !important;
+}
+
+.hero-product-carousel .hero-product-photo {
+  filter: saturate(0.99) contrast(1.055) brightness(0.955);
+}
+
+.hero-product-carousel .hero-editorial-wrist .hero-product-photo {
+  object-position: 58% 48%;
+}
+
+.hero-product-carousel .hero-gift-box .hero-product-photo {
+  object-position: 50% 44%;
+}
+
+.hero-product-carousel .hero-dark-slate .hero-product-photo {
+  object-position: 50% 48%;
+}
+
+.hero-product-carousel .hero-sculptural-abundance .hero-product-photo {
+  object-position: 53% 52%;
+}
+
+.hero-product-carousel figcaption span {
+  letter-spacing: -0.01em;
+}
+
+.hero-product-carousel figcaption small {
+  max-width: 55%;
+}
+
+.hero-photo-sheen {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255,248,230,0.16), transparent 30%),
+    linear-gradient(180deg, rgba(21,18,16,0.00), rgba(21,18,16,0.24) 74%, rgba(8,5,3,0.18)) !important;
+}
+
+@media (max-width: 760px) {
+  .hero-product-carousel .hero-gift-box .hero-product-photo {
+    object-position: 50% 38%;
+  }
+  .hero-product-carousel figcaption small {
+    max-width: none;
+  }
+}
