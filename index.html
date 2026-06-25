@@ -239,15 +239,18 @@
       PRESETS.forEach(preset => {
         const presetImages = {
           'ocean-calm': 'assets/generated/image2_threaded/soulstone_threaded_hero_ocean_calm.png',
-          'golden-clarity': 'assets/generated/soulstone_collection_golden_clarity.jpg',
+          'golden-clarity': 'assets/generated/image2_threaded/soulstone_threaded_golden_clarity.png',
           'soft-love': 'assets/generated/image2_threaded/soulstone_threaded_soft_love.png',
           'grounded-protection': 'assets/generated/image2_threaded/soulstone_threaded_grounded_protection.png',
           'abundance-ritual': 'assets/generated/image2_threaded/soulstone_threaded_abundance.png'
         };
-        const swatchBeads = preset.stones.slice(0, 7).map(id => {
-          const stone = getStoneById(id);
-          return stone ? `<span class="bead-mini" style="background: ${stone.gradient}"></span>` : '';
-        }).join('');
+        const materialLine = Array.from(new Set(preset.stones
+          .map(id => getStoneById(id))
+          .filter(Boolean)
+          .filter(stone => !stone.isAccent)
+          .map(stone => localizeStoneName(stone.name))))
+          .slice(0, 3)
+          .join(' · ');
 
         const card = document.createElement('a');
         card.href = `design.html?preset=${preset.id}`;
@@ -257,7 +260,7 @@
           <div class="preset-photo-wrap">
             <img src="${presetImages[preset.id]}" alt="" aria-hidden="true" loading="lazy" onerror="this.closest('.preset-photo-wrap').classList.add('image-missing')">
             <div class="preset-photo-overlay"></div>
-            <div class="preset-swatch floating-swatch">${swatchBeads}</div>
+            <div class="preset-material-ribbon"><span>${materialLine}</span><em>threaded product preview</em></div>
           </div>
           <div class="preset-card-body">
             <h3>${localizePresetName(preset.name)}</h3>
