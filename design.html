@@ -442,9 +442,47 @@
         'golden-clarity': 'assets/generated/image2_threaded/soulstone_threaded_golden_clarity.png',
       };
       const exact = PRESETS.find(preset => sameStoneSet(preset.stones, stones));
-      const byIntent = PRESETS.find(preset => preset.intention === intention);
-      const preset = exact || byIntent;
-      return preset ? imageMap[preset.id] : '';
+      return exact ? imageMap[exact.id] : '';
+    }
+
+    function reorderStone(fromIndex, toIndex) {
+      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return;
+      if (fromIndex >= currentStones.length || toIndex >= currentStones.length) return;
+      const next = [...currentStones];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      currentStones = next;
+      renderAll({ action: 'reorder' });
+    }
+
+    function attachCanvasReorderHandlers(canvas) {
+      const beads = Array.from(canvas.querySelectorAll('.draggable-product-bead[data-index]'));
+      if (!beads.length) return;
+      let dragFrom = null;
+      beads.forEach(bead => {
+        bead.setAttribute('role', 'button');
+        bead.setAttribute('tabindex', '0');
+        bead.addEventListener('pointerdown', event => {
+          dragFrom = Number(bead.dataset.index);
+          canvas.classList.add('is-reordering');
+          bead.classList.add('is-dragging');
+          try { bead.setPointerCapture(event.pointerId); } catch (_) {}
+          event.preventDefault();
+        });
+        bead.addEventListener('pointerup', event => {
+          const target = document.elementFromPoint(event.clientX, event.clientY)?.closest?.('.draggable-product-bead[data-index]');
+          const toIndex = target ? Number(target.dataset.index) : dragFrom;
+          canvas.classList.remove('is-reordering');
+          bead.classList.remove('is-dragging');
+          if (Number.isFinite(dragFrom) && Number.isFinite(toIndex)) reorderStone(dragFrom, toIndex);
+          dragFrom = null;
+        });
+        bead.addEventListener('pointercancel', () => {
+          canvas.classList.remove('is-reordering');
+          bead.classList.remove('is-dragging');
+          dragFrom = null;
+        });
+      });
     }
 
     function renderAll(meta = {}) {
@@ -471,12 +509,8 @@
         void canvas.offsetWidth;
         canvas.classList.add('stone-added');
       }
-      const matchedProductPhoto = isCompleteProduct ? image2ProductPhotoForStones(currentStones, selectedIntention) : '';
-      if (matchedProductPhoto) {
-        canvas.innerHTML = `<div class="live-image2-product-wrap"><img class="live-image2-product-photo" src="${matchedProductPhoto}" alt="Finished threaded bracelet preview"></div>`;
-      } else {
-        renderBracelet(canvas, currentStones, { width: size, height: renderHeight, beadSize: currentBeadSize + 14, completed: isCompleteProduct, productMode: isCompleteProduct });
-      }
+      renderBracelet(canvas, currentStones, { width: size, height: renderHeight, beadSize: currentBeadSize + 14, completed: isCompleteProduct, productMode: isCompleteProduct });
+      attachCanvasReorderHandlers(canvas);
 
       // Stats
       document.getElementById('stat-beads').textContent = currentStones.length;
@@ -671,7 +705,7 @@
       const bom = payload.stone_summary.map(s =>
         `<div class="admin-row"><span class="label">${s.stone} ×${s.count}</span><span class="value">$${(s.unit_price * s.count).toFixed(2)}</span></div>`
       ).join('');
-      const productPhoto = productPhotoForPayload(payload);
+      const productPhoto = ''; // Custom review must reflect the user's exact selected beads and order; use dynamic renderer, not a generic collection photo.
 
       content.innerHTML = `
         <div class="checkout-product-preview product-reveal-preview">
@@ -737,6 +771,13 @@
       closeCheckout();
       window.location.href = 'admin.html';
     }
+
+    // Lightweight QA handle for automated checks; not rendered in the customer UI.
+    window.__soulStoneStudio = {
+      getStones: () => [...currentStones],
+      reorder: (fromIndex, toIndex) => reorderStone(fromIndex, toIndex),
+      getBeadSize: () => currentBeadSize,
+    };
 
     // Initial render
     renderAll();

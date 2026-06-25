@@ -3955,3 +3955,93 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   }
   .preset-material-ribbon em { font-size: 0.54rem; }
 }
+
+
+/* ─── Custom-design truth pass: selected beads drive preview, draggable canvas ─── */
+.draggable-product-bead {
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+}
+
+.draggable-product-bead:hover {
+  filter: drop-shadow(0 0 10px rgba(226,198,151,0.34));
+}
+
+.draggable-product-bead.is-dragging,
+.bracelet-container.is-reordering .draggable-product-bead:hover {
+  cursor: grabbing;
+  opacity: 0.92;
+  transform: scale(1.08);
+}
+
+.threaded-cord {
+  pointer-events: none;
+}
+
+.bracelet-container.is-complete {
+  cursor: default;
+}
+
+.bracelet-container.is-complete::after {
+  content: 'Drag beads on the bracelet to reorder';
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  padding: 0.36rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,246,228,0.10);
+  background: rgba(18,14,10,0.52);
+  color: rgba(232,224,211,0.62);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.live-image2-product-wrap {
+  display: none;
+}
+
+.stone-pick.material-pick {
+  min-height: 92px;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  gap: 0.68rem;
+  border-radius: 18px;
+  background: rgba(255,246,228,0.024);
+}
+
+.material-thumb {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: rgba(255,246,228,0.035);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.045), 0 10px 24px rgba(0,0,0,0.18);
+}
+
+.material-thumb .bead-mini {
+  width: 42px;
+  height: 42px;
+}
+
+.material-pick .name {
+  font-size: 0.94rem;
+}
+
+.material-note,
+.material-meta {
+  font-size: 0.56rem;
+}
+
+.material-meta {
+  max-width: 128px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkout-bracelet:not(.has-product-photo) .soulstone-product-svg {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+}
