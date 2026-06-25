@@ -3033,3 +3033,341 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   .ritual-bracelet-preview { min-height: 245px; }
   .ritual-stone-list { grid-template-columns: 1fr; text-align: left; }
 }
+
+
+/* ─── Product-manager iteration: guided decision support in Design Studio ─── */
+.guidance-section {
+  margin-top: -0.25rem;
+}
+
+.decision-card,
+.next-step-card {
+  border: 1px solid rgba(255,246,228,0.11);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(200,168,124,0.12), transparent 38%),
+    linear-gradient(145deg, rgba(255,246,228,0.055), rgba(0,0,0,0.10));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
+  padding: 0.95rem;
+}
+
+.decision-card strong,
+.next-step-card strong {
+  display: block;
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  line-height: 1.2;
+}
+
+.decision-card p {
+  margin: 0.45rem 0 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.decision-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.decision-actions .btn {
+  width: 100%;
+  justify-content: center;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.next-step-card {
+  margin-top: 0.7rem;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(126,200,217,0.11), transparent 38%),
+    rgba(25,21,16,0.72);
+}
+
+.next-step-card.ready {
+  display: grid;
+  gap: 0.65rem;
+  border-color: rgba(200,168,124,0.28);
+}
+
+.next-step-card > span,
+.stone-match-summary {
+  display: block;
+  color: var(--color-text-dim);
+  font-size: 0.66rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  margin-bottom: 0.55rem;
+}
+
+.suggestion-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+  margin-bottom: 0.65rem;
+}
+
+.suggestion-chip {
+  border: 1px solid rgba(255,246,228,0.09);
+  border-radius: 16px;
+  background: rgba(255,246,228,0.035);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.35rem;
+  transition: all var(--transition-fast);
+}
+
+.suggestion-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(200,168,124,0.34);
+  background: rgba(255,246,228,0.07);
+  color: var(--color-cream);
+}
+
+.suggestion-chip .swatch {
+  width: 30px;
+  height: 30px;
+}
+
+.suggestion-chip em {
+  font-style: normal;
+  font-size: 0.62rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.stone-picker-tools {
+  margin-bottom: 0.7rem;
+}
+
+.stone-search {
+  width: 100%;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,246,228,0.12);
+  background: rgba(14,11,9,0.54);
+  color: var(--color-cream);
+  padding: 0 0.95rem;
+  font: inherit;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.stone-search::placeholder {
+  color: rgba(232,224,211,0.42);
+}
+
+.stone-search:focus {
+  border-color: rgba(200,168,124,0.48);
+  box-shadow: 0 0 0 3px rgba(200,168,124,0.10);
+}
+
+.stone-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+  padding: 0.55rem 0 0.45rem;
+}
+
+.mini-filter {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,246,228,0.10);
+  border-radius: 999px;
+  background: rgba(255,246,228,0.035);
+  color: var(--color-text-dim);
+  padding: 0.4rem 0.62rem;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mini-filter:hover,
+.mini-filter.active {
+  color: var(--color-bg);
+  border-color: transparent;
+  background: var(--color-accent);
+}
+
+.stone-pick.is-recommended {
+  border-color: rgba(200,168,124,0.22);
+  background: rgba(200,168,124,0.055);
+}
+
+.stone-pick.is-recommended::after {
+  content: 'match';
+  color: var(--color-accent-light);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1024px) {
+  .decision-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .guidance-section {
+    order: -1;
+  }
+  .suggestion-row {
+    grid-template-columns: repeat(3, minmax(86px, 1fr));
+    overflow-x: auto;
+  }
+  .suggestion-chip {
+    min-height: 78px;
+  }
+}
+
+
+/* ─── PM round: reduce design-studio choice overload ─── */
+.design-path-section {
+  padding-top: 1.05rem;
+}
+
+.design-path-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.48rem;
+}
+
+.design-path-card {
+  min-height: 82px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.42rem;
+  padding: 0.72rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255,246,228,0.09);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(200,168,124,0.08), transparent 42%),
+    rgba(255,246,228,0.035);
+  color: var(--color-text-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.design-path-card:hover,
+.design-path-card.active {
+  transform: translateY(-1px);
+  border-color: rgba(200,168,124,0.34);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(200,168,124,0.16), transparent 44%),
+    rgba(200,168,124,0.065);
+}
+
+.design-path-card strong {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.12;
+}
+
+.design-path-card span {
+  color: var(--color-text-dim);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.formula-meter {
+  margin: 0.75rem 0 0.7rem;
+  padding: 0.68rem;
+  border: 1px solid rgba(255,246,228,0.08);
+  border-radius: 16px;
+  background: rgba(14,11,9,0.36);
+}
+
+.formula-meter > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.42rem;
+}
+
+.formula-meter span {
+  color: var(--color-text-dim);
+  font-size: 0.66rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.formula-meter strong {
+  color: var(--color-accent-light);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+}
+
+.formula-meter small {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--color-text-dim);
+  font-size: 0.68rem;
+}
+
+.formula-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-bottom: 0.7rem;
+}
+
+.formula-steps span {
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0.42rem;
+  border: 1px dashed rgba(255,246,228,0.13);
+  border-radius: 14px;
+  color: var(--color-text-dim);
+  font-size: 0.62rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.formula-steps span.done {
+  border-style: solid;
+  border-color: rgba(200,168,124,0.35);
+  color: var(--color-accent-light);
+  background: rgba(200,168,124,0.065);
+}
+
+.stone-pick .stone-reason {
+  display: block;
+  color: var(--color-text-dim);
+  font-size: 0.58rem;
+  line-height: 1.2;
+  min-height: 1.4em;
+  padding: 0 0.16rem;
+}
+
+.suggestion-chip small {
+  color: var(--color-text-dim);
+  font-size: 0.52rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .design-path-grid {
+    grid-template-columns: 1fr;
+  }
+  .design-path-card {
+    min-height: 68px;
+  }
+  .formula-steps {
+    grid-template-columns: 1fr;
+  }
+}
