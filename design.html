@@ -16,7 +16,7 @@
         <strong>Made-to-order bracelet</strong>
       </div>
       <figure class="studio-material-photo">
-        <img src="assets/generated/soulstone_macro_crystal_pearl.jpg" alt="Macro crystal, pearl, and silver material reference">
+        <img src="assets/generated/soulstone_luxe_material_macro.jpg" alt="Macro crystal, pearl, and silver material reference">
         <figcaption data-i18n-text="design_material_caption">Live material reference · crystal / pearl / silver</figcaption>
       </figure>
       <div id="bracelet-canvas" class="bracelet-container"></div>
@@ -136,8 +136,8 @@
           </div>
           <div class="design-progress-track"><span id="design-progress-fill"></span></div>
         </div>
-        <button class="btn btn-primary" style="width: 100%;" onclick="simulateCheckout()" data-i18n-text="design_complete">
-          Complete Design
+        <button class="btn btn-primary" style="width: 100%;" onclick="simulateCheckout()">
+          Preview Finished Piece
         </button>
         <div class="text-center mt-2">
           <span class="trust-badge">
@@ -160,10 +160,10 @@
   <!-- Checkout Modal -->
   <div id="checkout-modal" class="modal-overlay" style="display:none;">
     <div class="modal-content">
-      <h2>Order Summary</h2>
+      <h2>Finished Piece Preview</h2>
       <div id="checkout-content"></div>
       <div class="flex gap-1 mt-3">
-        <button class="btn btn-primary" onclick="viewInAdmin()">View in Admin</button>
+        <button class="btn btn-primary" onclick="viewInAdmin()">Save Design</button>
         <button class="btn btn-secondary" onclick="closeCheckout()">Close</button>
       </div>
     </div>
@@ -285,8 +285,7 @@
       { id: 'all', label: 'All' },
       { id: 'main', label: 'Main stones' },
       { id: 'accent', label: 'Accents' },
-      { id: 'under4', label: 'Under $4' },
-    ];
+          ];
 
     stoneSearch.addEventListener('input', (event) => {
       stoneSearchTerm = event.target.value.trim().toLowerCase();
@@ -324,7 +323,6 @@
       if (selectedStoneFilter === 'recommended') return recommendedStoneIds().includes(stone.id);
       if (selectedStoneFilter === 'main') return !stone.isAccent;
       if (selectedStoneFilter === 'accent') return !!stone.isAccent;
-      if (selectedStoneFilter === 'under4') return stone.price <= 4;
       return true;
     }
 
@@ -346,12 +344,17 @@
       stonePicker.innerHTML = visible.map(stone => {
         const match = selectedIntention && (stone.intention || []).includes(selectedIntention);
         const selectedCount = currentStones.filter(id => id === stone.id).length;
+        const materialLabel = stone.isAccent ? 'sterling silver accent' : stone.texture === 'baroque' ? 'freshwater pearl luster' : `${stone.texture || 'natural'} crystal`;
+        const priceLabel = stone.isAccent ? 'premium accent' : stone.price >= 5 ? 'premium material' : 'signature material';
         return `
-          <button class="stone-pick ${match ? 'is-recommended' : ''}" onclick="addStone('${stone.id}')" aria-label="Add ${localizeStoneName(stone.name)}">
-            ${renderBeadMini(stone.id)}
-            <span class="name">${localizeStoneName(stone.name)}</span>
-            <span class="stone-reason">${stoneDecisionReason(stone)}</span>
-            <span class="name text-dim">$${stone.price.toFixed(1)}${selectedCount ? ` · ×${selectedCount}` : ''}</span>
+          <button class="stone-pick material-pick ${match ? 'is-recommended' : ''}" onclick="addStone('${stone.id}')" aria-label="Add ${localizeStoneName(stone.name)}">
+            <span class="material-thumb">${renderBeadMini(stone.id)}</span>
+            <span class="material-copy">
+              <span class="name">${localizeStoneName(stone.name)}</span>
+              <span class="stone-reason">${stoneDecisionReason(stone)}</span>
+              <span class="material-note">${materialLabel}</span>
+            </span>
+            <span class="material-meta">${priceLabel}${selectedCount ? ` · ×${selectedCount}` : ''}</span>
           </button>
         `;
       }).join('');
@@ -630,6 +633,20 @@
       };
     }
 
+    function productPhotoForPayload(payload) {
+      const imageMap = {
+        'ocean-calm': 'assets/generated/soulstone_luxe_ocean_calm.jpg',
+        'soft-love': 'assets/generated/soulstone_luxe_soft_love.jpg',
+        'grounded-protection': 'assets/generated/soulstone_luxe_protection.jpg',
+        'abundance-ritual': 'assets/generated/soulstone_luxe_abundance.jpg',
+        'golden-clarity': 'assets/generated/soulstone_luxe_abundance.jpg',
+      };
+      const exact = PRESETS.find(preset => sameStoneSet(preset.stones, payload.stones));
+      const byIntent = PRESETS.find(preset => preset.intention === payload.intention);
+      const preset = exact || byIntent;
+      return preset ? imageMap[preset.id] : '';
+    }
+
     function simulateCheckout() {
       if (currentStones.length === 0) {
         alert('Please add at least one stone to your bracelet.');
@@ -645,10 +662,13 @@
       const bom = payload.stone_summary.map(s =>
         `<div class="admin-row"><span class="label">${s.stone} ×${s.count}</span><span class="value">$${(s.unit_price * s.count).toFixed(2)}</span></div>`
       ).join('');
+      const productPhoto = productPhotoForPayload(payload);
 
       content.innerHTML = `
-        <div class="checkout-product-preview">
-          <div id="checkout-bracelet" class="checkout-bracelet"></div>
+        <div class="checkout-product-preview product-reveal-preview">
+          <div id="checkout-bracelet" class="checkout-bracelet ${productPhoto ? 'has-product-photo' : ''}">
+            ${productPhoto ? `<img class="finished-product-photo" src="${productPhoto}" alt="Finished bracelet product preview">` : ''}
+          </div>
           <div class="checkout-copy">
             <p class="eyebrow">Your finished piece</p>
             <h3>${payload.design_poetry.title}</h3>
@@ -659,14 +679,15 @@
                 <span class="checkout-price-label">Made to order</span>
                 <strong>$${payload.total_price.toFixed(2)}</strong>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="viewInAdmin()">Continue to Order Preview</button>
+              <button class="btn btn-primary btn-sm" onclick="viewInAdmin()">Save My Bracelet</button>
             </div>
             <div class="conversion-pill-row" aria-label="Order value highlights">
               <span>Finished preview</span>
-              <span>Natural stones</span>
+              <span>Natural stones vary beautifully</span>
               <span>Story Card included</span>
               <span>Gift-ready ritual</span>
             </div>
+            <p class="natural-variation-note">Each finished bracelet is made to order; stone tone, inclusions, and pearl shape vary slightly, making every piece one of one.</p>
           </div>
         </div>
         <div class="admin-section order-summary-compact" style="margin-bottom: 1rem;">
@@ -694,7 +715,7 @@
       `;
 
       const checkoutBracelet = document.getElementById('checkout-bracelet');
-      if (checkoutBracelet) renderBracelet(checkoutBracelet, payload.stones, { width: 360, height: 270, beadSize: currentBeadSize + 13, animated: false, completed: true, productMode: true });
+      if (checkoutBracelet && !checkoutBracelet.classList.contains('has-product-photo')) renderBracelet(checkoutBracelet, payload.stones, { width: 360, height: 270, beadSize: currentBeadSize + 13, animated: false, completed: true, productMode: true });
 
       modal.style.display = 'flex';
     }

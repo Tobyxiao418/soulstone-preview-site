@@ -3577,3 +3577,250 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   .hero-product-carousel figcaption small { text-align: left; }
   .landing-product-photo { height: 175px; }
 }
+
+
+/* ─── Luxury redesign pass: atelier studio + material picker + product reveal ─── */
+.hero {
+  background:
+    radial-gradient(circle at 74% 18%, rgba(234,219,194,0.16), transparent 34%),
+    linear-gradient(130deg, #f4ead8 0%, #dac9ad 38%, #1a120d 39%, #0f0c0a 100%);
+}
+
+.hero-copy .subtitle {
+  max-width: 620px;
+}
+
+.hero-product-card.hero-photo-card {
+  box-shadow: 0 44px 140px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+.visual-proof-section {
+  background: linear-gradient(180deg, #17120e, #ede0c8 46%, #18120e 47%);
+}
+
+.studio-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+  background: #0c0907;
+}
+
+.studio-canvas {
+  background:
+    radial-gradient(circle at 52% 36%, rgba(242,224,194,0.16), transparent 32%),
+    linear-gradient(180deg, rgba(12,9,7,0.12), rgba(12,9,7,0.72)),
+    url('../assets/generated/soulstone_luxe_material_macro.jpg') center / cover no-repeat;
+}
+
+.studio-canvas::before {
+  opacity: 0.46;
+  background: radial-gradient(circle at 50% 38%, rgba(242,229,207,0.20), transparent 38%);
+}
+
+.studio-canvas::after {
+  opacity: 0.18;
+}
+
+.studio-material-photo {
+  display: none;
+}
+
+.stats-bar {
+  max-width: 520px;
+  background: rgba(12,9,7,0.36);
+  border-color: rgba(255,246,228,0.12);
+  backdrop-filter: blur(18px);
+}
+
+.price-display {
+  background: rgba(12,9,7,0.30);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(255,246,228,0.10);
+}
+
+.studio-panel {
+  background:
+    linear-gradient(180deg, rgba(247,235,212,0.045), transparent 22%),
+    #15110e;
+}
+
+.panel-label {
+  letter-spacing: 0.14em;
+}
+
+.stone-grid {
+  grid-template-columns: 1fr !important;
+  gap: 0.62rem;
+}
+
+.stone-pick.material-pick {
+  min-height: 112px;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  align-items: center;
+  text-align: left;
+  gap: 0.78rem;
+  padding: 0.78rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255,246,228,0.07), transparent 36%),
+    rgba(255,246,228,0.034);
+}
+
+.stone-pick.material-pick:hover,
+.stone-pick.material-pick.is-recommended {
+  border-color: rgba(226,198,151,0.32);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(226,198,151,0.13), transparent 36%),
+    rgba(226,198,151,0.054);
+}
+
+.stone-pick.material-pick::after {
+  display: none;
+}
+
+.material-thumb {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,246,228,0.12), rgba(0,0,0,0.12));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 32px rgba(0,0,0,0.20);
+}
+
+.material-thumb .bead-mini {
+  width: 54px;
+  height: 54px;
+}
+
+.material-copy {
+  display: grid;
+  gap: 0.24rem;
+}
+
+.material-pick .name {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+}
+
+.material-note,
+.material-meta {
+  color: var(--color-text-dim);
+  font-size: 0.64rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.material-meta {
+  justify-self: end;
+  padding: 0.38rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,246,228,0.10);
+  white-space: nowrap;
+}
+
+.modal-overlay {
+  background: rgba(8,6,4,0.86) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.modal-content {
+  width: min(1180px, 94vw);
+  max-height: 92vh;
+  border-radius: 34px;
+  padding: clamp(1.1rem, 2.4vw, 2rem);
+  background:
+    radial-gradient(circle at 25% 0%, rgba(246,227,196,0.12), transparent 36%),
+    #14100d;
+}
+
+.modal-content > h2 {
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  letter-spacing: -0.035em;
+  margin-bottom: 1.2rem;
+}
+
+.product-reveal-preview.checkout-product-preview {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.92fr) minmax(320px, 0.8fr);
+  gap: clamp(1rem, 3vw, 2.4rem);
+  align-items: center;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-radius: 30px;
+  border: 1px solid rgba(255,246,228,0.10);
+  background:
+    linear-gradient(145deg, rgba(255,246,228,0.05), rgba(0,0,0,0.12)),
+    #19130f;
+}
+
+.checkout-bracelet {
+  min-height: 340px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(242,226,200,0.17), transparent 38%),
+    linear-gradient(160deg, #cab99e, #5a493a 56%, #1a120d);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 26px 70px rgba(0,0,0,0.30);
+  overflow: visible;
+}
+
+.checkout-copy h3 {
+  font-size: clamp(1.8rem, 3vw, 3.1rem);
+  letter-spacing: -0.03em;
+}
+
+.natural-variation-note {
+  margin-top: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  border-top: 1px solid rgba(255,246,228,0.09);
+  padding-top: 0.85rem;
+}
+
+.order-summary-compact,
+.modal-content .admin-section:has(h3) {
+  opacity: 0.72;
+}
+
+@media (max-width: 900px) {
+  .product-reveal-preview.checkout-product-preview {
+    grid-template-columns: 1fr;
+  }
+  .checkout-bracelet { min-height: 280px; }
+  .stone-pick.material-pick {
+    grid-template-columns: 66px minmax(0,1fr);
+  }
+  .material-meta {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+.checkout-bracelet.has-product-photo {
+  padding: 0;
+  background: #17120e;
+}
+
+.finished-product-photo {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  object-fit: cover;
+  display: block;
+  border-radius: 28px;
+  filter: contrast(1.06) saturate(0.96) brightness(0.96);
+}
+
+.checkout-bracelet.has-product-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  pointer-events: none;
+  background: radial-gradient(circle at 45% 26%, rgba(255,255,255,0.10), transparent 36%), linear-gradient(180deg, transparent 58%, rgba(8,5,3,0.30));
+}
