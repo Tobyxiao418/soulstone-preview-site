@@ -216,12 +216,12 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
   const { width = 560, height = 370, beadSize = 22, animated = true } = options;
   const cx = width / 2;
   const cy = height * 0.50;
-  const productScale = Math.max(0.84, Math.min(width / 560, height / 370));
+  const productScale = Math.max(0.88, Math.min(1.08, Math.min(width / 560, height / 370)));
   const count = Math.max(1, stoneIds.length);
-  const nominalR = beadSize * 1.22 * productScale;
-  const strandCircumference = count * nominalR * 1.78;
-  const rx = Math.min(width * 0.34, Math.max(width * 0.20, strandCircumference / 5.25));
-  const ry = Math.min(height * 0.27, Math.max(height * 0.15, rx * 0.55));
+  const nominalR = beadSize * 1.34 * productScale;
+  const strandCircumference = count * nominalR * 1.42;
+  const rx = Math.min(width * 0.30, Math.max(width * 0.16, strandCircumference / 6.65));
+  const ry = Math.min(height * 0.255, Math.max(height * 0.135, rx * 0.52));
 
   const beadCutPath = (id) => {
     if (typeof beadImagePath !== 'function') return '';
@@ -233,8 +233,8 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
     const stone = getStoneById(id) || getStoneById('aquamarine');
     const front = Math.sin(angle) > 0;
     const side = Math.abs(Math.cos(angle));
-    const baseR = stone.isAccent ? beadSize * 0.62 : stone.texture === 'baroque' ? beadSize * 1.04 : beadSize * 1.14;
-    const depthScale = front ? 1.22 : 0.92;
+    const baseR = stone.isAccent ? beadSize * 0.58 : stone.texture === 'baroque' ? beadSize * 1.08 : beadSize * 1.18;
+    const depthScale = front ? 1.18 : 0.94;
     const featureScale = (!stone.isAccent && (i % 5 === 0 || stone.texture === 'irregular')) ? 1.10 : 1;
     return {
       id,
@@ -243,8 +243,8 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
       angle,
       front,
       r: baseR * productScale * depthScale * featureScale,
-      x: cx + rx * Math.cos(angle) + (((i * 17) % 5) - 2) * 0.9 * productScale,
-      y: cy + ry * Math.sin(angle) + (front ? 3.5 : -2.5) * productScale + (((i * 11) % 5) - 2) * 0.55 * productScale,
+      x: cx + rx * Math.cos(angle) + (((i * 17) % 5) - 2) * 0.45 * productScale,
+      y: cy + ry * Math.sin(angle) + (front ? 3.2 : -2.0) * productScale + (((i * 11) % 5) - 2) * 0.28 * productScale,
       rotate: -16 + ((i * 31) % 39),
       opacity: front ? 1 : 0.86,
       side,
