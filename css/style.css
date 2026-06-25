@@ -4398,3 +4398,58 @@ body {
     max-width: none;
   }
 }
+
+
+/* ─── Hero v2: product-system diversity + DIY design signal ─── */
+.hero-product-carousel .hero-chunky-lapis .hero-product-photo {
+  object-position: 50% 50%;
+}
+
+.hero-product-carousel .hero-diy-tray .hero-product-photo {
+  object-position: 50% 45%;
+  filter: saturate(0.96) contrast(1.04) brightness(0.98);
+}
+
+.hero-product-carousel .hero-multistrand-cord .hero-product-photo {
+  object-position: 50% 47%;
+}
+
+.hero-product-carousel .hero-statement-chunks .hero-product-photo {
+  object-position: 52% 50%;
+}
+
+.hero-product-carousel figcaption {
+  left: 1rem;
+  right: 1rem;
+}
+
+.hero-product-carousel figcaption small {
+  max-width: 58%;
+}
+
+.hero-trust-row span {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(0,0,0,0.04)),
+    rgba(255,246,228,0.035);
+  border-color: rgba(255,246,228,0.11);
+}
+
+.hero-trust-row span:nth-child(3) {
+  color: rgba(255,246,228,0.86);
+  border-color: rgba(226,198,151,0.24);
+  background: rgba(226,198,151,0.07);
+}
+
+.hero-copy .hero-body::after {
+  content: ' Mix large-cut crystals, baroque pearls, silver charms and cord styles — then arrange the sequence yourself.';
+  color: rgba(232,224,211,0.82);
+}
+
+@media (max-width: 760px) {
+  .hero-product-carousel .hero-diy-tray .hero-product-photo {
+    object-position: 48% 50%;
+  }
+  .hero-product-carousel figcaption small {
+    max-width: none;
+  }
+}
