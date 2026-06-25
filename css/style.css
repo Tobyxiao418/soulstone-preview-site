@@ -4453,3 +4453,72 @@ body {
     max-width: none;
   }
 }
+
+
+/* ─── SoulStone system upgrade: irregular stones, pearls, silver hardware, cords ─── */
+.studio-canvas {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255,246,228,0.13), transparent 34%),
+    linear-gradient(180deg, rgba(12,9,7,0.08), rgba(12,9,7,0.74)),
+    url('../assets/generated/image2_system_upgrade/soulstone_system_studio_workbench.png') center / cover no-repeat !important;
+}
+
+.visual-proof-section .photo-tile img,
+.gift-photo-card img,
+.landing-product-photo img,
+.preset-photo-wrap img {
+  filter: saturate(0.97) contrast(1.055) brightness(0.965);
+}
+
+.material-thumb .material-stone.shape-chunk,
+.bead-mini.material-stone.shape-chunk {
+  border-radius: 42% 58% 46% 54% / 52% 42% 58% 48%;
+  transform: rotate(-8deg);
+}
+
+.material-thumb .material-pearl,
+.bead-mini.material-pearl,
+.bead-mini.shape-baroque {
+  border-radius: 56% 44% 52% 48% / 46% 58% 42% 54%;
+  transform: rotate(9deg);
+}
+
+.material-thumb .material-hardware,
+.bead-mini.material-hardware {
+  border-radius: 34%;
+  background: linear-gradient(135deg, #fffdf7, #aaa49b 42%, #f5f1e8 58%, #67615a) !important;
+}
+
+.material-thumb .material-cord,
+.bead-mini.material-cord,
+.bead-mini.shape-cord {
+  width: 48px !important;
+  height: 14px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+.material-thumb .material-cord img,
+.bead-mini.material-cord img {
+  display: none !important;
+}
+
+.stone-pick.material-pick.material-cord {
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+}
+
+.material-pick.material-hardware .material-meta,
+.material-pick.material-cord .material-meta,
+.material-pick.shape-chunk .material-meta {
+  color: rgba(226,198,151,0.82);
+  border-color: rgba(226,198,151,0.20);
+}
+
+.preset-material-ribbon em {
+  color: rgba(226,198,151,0.72);
+}
+
+.conversion-proof-list div:nth-child(2) span::after {
+  content: ' · choose the exact mix';
+  color: rgba(226,198,151,0.72);
+}

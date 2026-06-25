@@ -233,7 +233,8 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
     const stone = getStoneById(id) || getStoneById('aquamarine');
     const front = Math.sin(angle) > 0;
     const side = Math.abs(Math.cos(angle));
-    const baseR = stone.isAccent ? beadSize * 0.58 : stone.texture === 'baroque' ? beadSize * 1.08 : beadSize * 1.18;
+    const materialType = stone.type || (stone.isAccent ? 'hardware' : 'stone');
+    const baseR = materialType === 'cord' ? beadSize * 0.42 : materialType === 'hardware' ? beadSize * 0.56 : stone.texture === 'chunk' ? beadSize * 1.34 : stone.texture === 'baroque' ? beadSize * 1.08 : beadSize * 1.16;
     const depthScale = front ? 1.18 : 0.94;
     const featureScale = (!stone.isAccent && (i % 5 === 0 || stone.texture === 'irregular')) ? 1.10 : 1;
     return {
@@ -303,12 +304,19 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
     const clipId = `finished-clip-${i}-${id}`;
     const img = beadCutPath(id);
     const delay = animated ? `style="animation: beadPop 0.42s cubic-bezier(.2,.9,.2,1.2) ${i * 0.016}s both"` : '';
-    const pearl = stone.texture === 'baroque';
-    const metal = stone.isAccent;
-    const irregular = stone.texture === 'irregular';
+    const pearl = stone.type === 'pearl' || stone.texture === 'baroque';
+    const metal = stone.type === 'hardware' || (stone.isAccent && stone.type !== 'cord');
+    const cord = stone.type === 'cord' || stone.texture === 'cord';
+    const chunky = stone.texture === 'chunk' || stone.scale === 'hero';
+    const irregular = stone.texture === 'irregular' || chunky;
     svg += `<g class="finished-product-bead draggable-product-bead" data-index="${originalIndex}" opacity="${opacity}" ${delay}>`;
     svg += `<ellipse cx="${x}" cy="${y + r * 0.42}" rx="${r * 0.82}" ry="${r * 0.34}" fill="#000" opacity="${front ? 0.28 : 0.18}"/>`;
-    if (metal) {
+    if (cord) {
+      svg += `<g transform="rotate(${rotate} ${x} ${y})" filter="url(#finished-bead-shadow)">
+        <rect x="${x-r*1.45}" y="${y-r*.22}" width="${r*2.9}" height="${r*.44}" rx="${r*.22}" fill="url(#finished-grad-${id})" opacity="0.96"/>
+        <path d="M ${x-r*1.30} ${y-r*.02} C ${x-r*.36} ${y-r*.32}, ${x+r*.38} ${y+r*.32}, ${x+r*1.30} ${y-r*.02}" stroke="#fff" stroke-opacity="0.28" stroke-width="0.8" fill="none"/>
+      </g>`;
+    } else if (metal) {
       svg += `<g transform="rotate(${rotate} ${x} ${y})" filter="url(#finished-bead-shadow)">
         <ellipse cx="${x}" cy="${y}" rx="${r * 1.20}" ry="${r * 0.72}" fill="url(#finished-silver)"/>
         <clipPath id="${clipId}"><ellipse cx="${x}" cy="${y}" rx="${r * 1.12}" ry="${r * 0.66}"/></clipPath>
@@ -321,8 +329,11 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
       svg += `<image href="${img}" x="${x - r * 1.48}" y="${y - r * 1.48}" width="${r * 2.96}" height="${r * 2.96}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.92"/>`;
       svg += `<ellipse cx="${x-r*.22}" cy="${y-r*.24}" rx="${r*.45}" ry="${r*.20}" fill="#fff8ec" opacity="0.44" transform="rotate(${rotate-22} ${x} ${y})"/>`;
     } else if (irregular) {
-      svg += `<path d="M ${x-r*.80} ${y-r*.34} C ${x-r*.42} ${y-r*.94}, ${x+r*.48} ${y-r*.82}, ${x+r*.82} ${y-r*.18} C ${x+r*.94} ${y+r*.44}, ${x+r*.18} ${y+r*.86}, ${x-r*.44} ${y+r*.72} C ${x-r*.98} ${y+r*.42}, ${x-r*1.02} ${y+r*.02}, ${x-r*.80} ${y-r*.34}" fill="url(#finished-grad-${id})" filter="url(#finished-bead-shadow)" transform="rotate(${rotate} ${x} ${y})"/>`;
-      svg += `<clipPath id="${clipId}"><path d="M ${x-r*.80} ${y-r*.34} C ${x-r*.42} ${y-r*.94}, ${x+r*.48} ${y-r*.82}, ${x+r*.82} ${y-r*.18} C ${x+r*.94} ${y+r*.44}, ${x+r*.18} ${y+r*.86}, ${x-r*.44} ${y+r*.72} C ${x-r*.98} ${y+r*.42}, ${x-r*1.02} ${y+r*.02}, ${x-r*.80} ${y-r*.34}" transform="rotate(${rotate} ${x} ${y})"/></clipPath>`;
+      const chunkPath = chunky
+        ? `M ${x-r*1.08} ${y-r*.22} L ${x-r*.55} ${y-r*.92} L ${x+r*.46} ${y-r*.78} L ${x+r*1.02} ${y-r*.08} L ${x+r*.56} ${y+r*.82} L ${x-r*.42} ${y+r*.88} L ${x-r*1.02} ${y+r*.34} Z`
+        : `M ${x-r*.80} ${y-r*.34} C ${x-r*.42} ${y-r*.94}, ${x+r*.48} ${y-r*.82}, ${x+r*.82} ${y-r*.18} C ${x+r*.94} ${y+r*.44}, ${x+r*.18} ${y+r*.86}, ${x-r*.44} ${y+r*.72} C ${x-r*.98} ${y+r*.42}, ${x-r*1.02} ${y+r*.02}, ${x-r*.80} ${y-r*.34}`;
+      svg += `<path d="${chunkPath}" fill="url(#finished-grad-${id})" filter="url(#finished-bead-shadow)" transform="rotate(${rotate} ${x} ${y})"/>`;
+      svg += `<clipPath id="${clipId}"><path d="${chunkPath}" transform="rotate(${rotate} ${x} ${y})"/></clipPath>`;
       svg += `<image href="${img}" x="${x-r*1.45}" y="${y-r*1.45}" width="${r*2.9}" height="${r*2.9}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.94"/>`;
       svg += `<ellipse cx="${x-r*.25}" cy="${y-r*.36}" rx="${r*.36}" ry="${r*.16}" fill="#fff" opacity="0.32" transform="rotate(${rotate-25} ${x} ${y})"/>`;
     } else {
@@ -363,5 +374,5 @@ function renderBeadMini(stoneId) {
   const stone = getStoneById(stoneId);
   if (!stone) return '';
   const img = (typeof beadImagePath === 'function') ? beadImagePath(stoneId) : '';
-  return `<span class="bead-mini realistic-mini bead-photo-mini" style="background: ${stone.gradient};"><img src="${img}" alt="" aria-hidden="true" loading="lazy" onerror="this.style.display='none'"></span>`;
+  return `<span class="bead-mini realistic-mini bead-photo-mini material-${stone.type || 'stone'} shape-${stone.texture || stone.shape || 'natural'}" style="background: ${stone.gradient};"><img src="${img}" alt="" aria-hidden="true" loading="lazy" onerror="this.style.display='none'"></span>`;
 }
