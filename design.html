@@ -16,7 +16,7 @@
         <strong>Made-to-order bracelet</strong>
       </div>
       <figure class="studio-material-photo">
-        <img src="assets/generated/soulstone_luxe_material_macro.jpg" alt="Macro crystal, pearl, and silver material reference">
+        <img src="assets/generated/image2_threaded/soulstone_threaded_design_studio_atelier.png" alt="Macro crystal, pearl, and silver material reference">
         <figcaption data-i18n-text="design_material_caption">Live material reference · crystal / pearl / silver</figcaption>
       </figure>
       <div id="bracelet-canvas" class="bracelet-container"></div>
@@ -433,6 +433,20 @@
       renderAll({ action: 'clear' });
     }
 
+    function image2ProductPhotoForStones(stones, intention) {
+      const imageMap = {
+        'ocean-calm': 'assets/generated/image2_threaded/soulstone_threaded_hero_ocean_calm.png',
+        'soft-love': 'assets/generated/image2_threaded/soulstone_threaded_soft_love.png',
+        'grounded-protection': 'assets/generated/image2_threaded/soulstone_threaded_grounded_protection.png',
+        'abundance-ritual': 'assets/generated/image2_threaded/soulstone_threaded_abundance.png',
+        'golden-clarity': 'assets/generated/image2_threaded/soulstone_threaded_abundance.png',
+      };
+      const exact = PRESETS.find(preset => sameStoneSet(preset.stones, stones));
+      const byIntent = PRESETS.find(preset => preset.intention === intention);
+      const preset = exact || byIntent;
+      return preset ? imageMap[preset.id] : '';
+    }
+
     function renderAll(meta = {}) {
       // Re-render intention chips
       intentionSelect.querySelectorAll('.chip').forEach((chip, i) => {
@@ -457,7 +471,12 @@
         void canvas.offsetWidth;
         canvas.classList.add('stone-added');
       }
-      renderBracelet(canvas, currentStones, { width: size, height: renderHeight, beadSize: currentBeadSize + 14, completed: isCompleteProduct, productMode: isCompleteProduct });
+      const matchedProductPhoto = isCompleteProduct ? image2ProductPhotoForStones(currentStones, selectedIntention) : '';
+      if (matchedProductPhoto) {
+        canvas.innerHTML = `<div class="live-image2-product-wrap"><img class="live-image2-product-photo" src="${matchedProductPhoto}" alt="Finished threaded bracelet preview"></div>`;
+      } else {
+        renderBracelet(canvas, currentStones, { width: size, height: renderHeight, beadSize: currentBeadSize + 14, completed: isCompleteProduct, productMode: isCompleteProduct });
+      }
 
       // Stats
       document.getElementById('stat-beads').textContent = currentStones.length;
@@ -634,17 +653,7 @@
     }
 
     function productPhotoForPayload(payload) {
-      const imageMap = {
-        'ocean-calm': 'assets/generated/soulstone_luxe_ocean_calm.jpg',
-        'soft-love': 'assets/generated/soulstone_luxe_soft_love.jpg',
-        'grounded-protection': 'assets/generated/soulstone_luxe_protection.jpg',
-        'abundance-ritual': 'assets/generated/soulstone_luxe_abundance.jpg',
-        'golden-clarity': 'assets/generated/soulstone_luxe_abundance.jpg',
-      };
-      const exact = PRESETS.find(preset => sameStoneSet(preset.stones, payload.stones));
-      const byIntent = PRESETS.find(preset => preset.intention === payload.intention);
-      const preset = exact || byIntent;
-      return preset ? imageMap[preset.id] : '';
+      return image2ProductPhotoForStones(payload.stones, payload.intention);
     }
 
     function simulateCheckout() {

@@ -3607,7 +3607,7 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   background:
     radial-gradient(circle at 52% 36%, rgba(242,224,194,0.16), transparent 32%),
     linear-gradient(180deg, rgba(12,9,7,0.12), rgba(12,9,7,0.72)),
-    url('../assets/generated/soulstone_luxe_material_macro.jpg') center / cover no-repeat;
+    url('../assets/generated/image2_threaded/soulstone_threaded_design_studio_atelier.png') center / cover no-repeat;
 }
 
 .studio-canvas::before {
@@ -3823,4 +3823,55 @@ h3 { font-size: 1.2rem; font-weight: 500; }
   border-radius: 28px;
   pointer-events: none;
   background: radial-gradient(circle at 45% 26%, rgba(255,255,255,0.10), transparent 36%), linear-gradient(180deg, transparent 58%, rgba(8,5,3,0.30));
+}
+
+
+/* ─── Image2 threaded product-photo upgrade: visible cord, no random holes ─── */
+.live-image2-product-wrap {
+  position: relative;
+  width: min(760px, 92vw);
+  max-width: 100%;
+  aspect-ratio: 16 / 10.6;
+  border-radius: 34px;
+  overflow: hidden;
+  box-shadow: 0 38px 110px rgba(0,0,0,0.44), inset 0 1px 0 rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,246,228,0.12);
+  background: #17120e;
+}
+
+.live-image2-product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.03) saturate(0.98) brightness(0.98);
+}
+
+.live-image2-product-wrap::after,
+.checkout-bracelet.has-product-photo::after,
+.hero-product-carousel::after,
+.landing-product-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.live-image2-product-wrap::after {
+  border-radius: 34px;
+  background: radial-gradient(circle at 48% 28%, rgba(255,255,255,0.08), transparent 34%), linear-gradient(180deg, transparent 58%, rgba(8,5,3,0.18));
+}
+
+.checkout-bracelet.has-product-photo {
+  background: #15100d;
+}
+
+.finished-product-photo {
+  object-position: center;
+}
+
+.hero-product-carousel .hero-product-photo,
+.landing-product-photo img,
+.finished-product-photo {
+  image-rendering: auto;
 }
