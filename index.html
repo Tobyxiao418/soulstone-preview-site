@@ -20,7 +20,7 @@
         </p>
         <div class="hero-actions">
           <a href="design.html" class="btn btn-primary btn-lg" data-i18n-text="home_cta_design">Design Your Bracelet</a>
-          <a href="quiz.html" class="btn btn-secondary btn-lg" data-i18n-text="home_cta_quiz">Take the Intention Quiz</a>
+          <a href="products.html" class="btn btn-secondary btn-lg">View Launch Presets</a>
         </div>
         <div class="hero-trust-row" aria-label="SoulStone product promise">
           <span>Chunky stones</span>
@@ -253,7 +253,12 @@
           .join(' · ');
 
         const card = document.createElement('a');
-        card.href = `design.html?preset=${preset.id}`;
+        const launchProductAnchors = {
+          'ocean-calm': 'products.html#calm-ocean',
+          'soft-love': 'products.html#soft-love-pearl',
+          'grounded-protection': 'products.html#grounded-protection'
+        };
+        card.href = launchProductAnchors[preset.id] || `design.html?preset=${preset.id}`;
         card.className = 'card preset-card photo-preset-card';
         card.style.textDecoration = 'none';
         card.innerHTML = `

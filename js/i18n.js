@@ -5,7 +5,7 @@ const SUPPORTED_LANGS = ['en', 'zh'];
 
 const I18N = {
   en: {
-    nav_home: 'Home', nav_design: 'Design Studio', nav_quiz: 'Quiz', nav_stones: 'Stones', nav_trust: 'Trust', nav_admin: 'Admin',
+    nav_home: 'Home', nav_products: 'Shop', nav_design: 'Design Studio', nav_quiz: 'Quiz', nav_stones: 'Stones', nav_policies: 'Policies', nav_trust: 'Trust', nav_admin: 'Admin',
     logo_tagline: 'Design Your Energy', lang_toggle: '中文',
     footer_disclaimer: 'For symbolic and personal inspiration only. Natural stones vary in color and texture.<br>SoulStone does not claim any medical, therapeutic, or financial benefits.',
     footer_tagline: 'Design Your Energy — Handcrafted crystal & pearl bracelets', footer_proto: 'MVP Prototype · Not for production use',
@@ -34,7 +34,7 @@ const I18N = {
     admin_eyebrow: 'Internal Preview', admin_title: 'Order Preview', admin_details: 'Design Details', admin_bom: 'Bill of Materials', admin_story: 'Story Card Text', admin_preview: 'Bracelet Preview', admin_sequence: 'Bead Sequence', admin_shopify: 'Simulated Shopify Draft Order', admin_back: 'Back to Design Studio', admin_copy: 'Copy JSON Payload', admin_empty: 'Complete a design to generate an order preview.', admin_proto: 'Prototype mode — no live Shopify connection'
   },
   zh: {
-    nav_home: '首页', nav_design: '设计工作室', nav_quiz: '能量测试', nav_stones: '宝石库', nav_trust: '信任说明', nav_admin: '订单预览',
+    nav_home: '首页', nav_products: '首发产品', nav_design: '设计工作室', nav_quiz: '能量测试', nav_stones: '宝石库', nav_policies: '政策草案', nav_trust: '信任说明', nav_admin: '订单预览',
     logo_tagline: '设计你的能量', lang_toggle: 'EN',
     footer_disclaimer: '仅用于象征意义与个人灵感。天然石材的颜色和纹理会自然变化。<br>SoulStone 不宣称任何医疗、治疗或财务收益。',
     footer_tagline: '设计你的能量 — 手作水晶与珍珠手链', footer_proto: 'MVP 原型 · 非正式生产版本',

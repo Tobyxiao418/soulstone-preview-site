@@ -3,9 +3,11 @@
 function renderNav(activePage) {
   const pages = [
     { href: 'index.html', labelKey: 'nav_home', id: 'home' },
+    { href: 'products.html', labelKey: 'nav_products', id: 'products' },
     { href: 'design.html', labelKey: 'nav_design', id: 'design' },
     { href: 'quiz.html', labelKey: 'nav_quiz', id: 'quiz' },
     { href: 'stones.html', labelKey: 'nav_stones', id: 'stones' },
+    { href: 'policies.html', labelKey: 'nav_policies', id: 'policies' },
     { href: 'trust.html', labelKey: 'nav_trust', id: 'trust' },
     { href: 'admin.html', labelKey: 'nav_admin', id: 'admin' },
   ];
