@@ -40,13 +40,16 @@
     initPage('admin');
 
     const orderData = localStorage.getItem('soulstone_last_order');
+    const savedLeadRequests = JSON.parse(localStorage.getItem('soulstone_lead_requests') || '[]');
 
     if (orderData) {
       const order = JSON.parse(orderData);
-      renderAdmin(order);
+      renderAdmin(order, savedLeadRequests);
+    } else if (savedLeadRequests.length) {
+      renderAdmin(savedLeadRequests[0], savedLeadRequests);
     }
 
-    function renderAdmin(order) {
+    function renderAdmin(order, leadRequests = []) {
       const content = document.getElementById('admin-content');
       const poetry = order.design_poetry || generateDesignPoetry(order.stones, order.intention);
 
@@ -55,6 +58,24 @@
         <div class="admin-row">
           <span class="label">${s.stone} (${s.id}) × ${s.count}</span>
           <span class="value">$${(s.unit_price * s.count).toFixed(2)}</span>
+        </div>
+      `).join('');
+
+      const customer = order.customer_request || {};
+      const leadRequestPayload = {
+        design_id: order.design_id,
+        status: order.status || 'ORDER_PREVIEW_ONLY',
+        customer,
+        design: order,
+        next_team_action: order.next_team_action || 'Confirm production feasibility, price, timeline, then contact customer manually.',
+      };
+      const leadRows = leadRequests.slice(0, 8).map(item => `
+        <div class="lead-request-row ${item.design_id === order.design_id ? 'active' : ''}">
+          <div>
+            <strong>${item.customer_request?.name || 'Unnamed lead'}</strong>
+            <span>${item.design_id} · ${item.intention || 'Custom'} · $${Number(item.total_price || 0).toFixed(2)}</span>
+          </div>
+          <small>${item.customer_request?.email || 'no email'} · ${new Date(item.customer_request?.submitted_at || item.created_at).toLocaleString()}</small>
         </div>
       `).join('');
 
@@ -86,6 +107,10 @@
       };
 
       content.innerHTML = `
+        <div class="lead-status-banner">
+          <strong>${order.status === 'NEW_LEAD_REQUEST' ? 'New lead request saved' : 'Prototype order preview'}</strong>
+          <span>${customer.email ? `${customer.name || 'Customer'} · ${customer.email}` : 'No customer contact yet — save from the Design Studio review form.'}</span>
+        </div>
         <div class="order-finished-hero">
           <div id="admin-finished-bracelet" class="order-finished-bracelet"></div>
           <div class="order-finished-copy">
@@ -136,6 +161,16 @@
               </div>
             </div>
 
+            <!-- Customer Request -->
+            <div class="admin-section">
+              <h3>Customer Request</h3>
+              <div class="admin-row"><span class="label">Name</span><span class="value">${customer.name || 'Not captured'}</span></div>
+              <div class="admin-row"><span class="label">Email</span><span class="value">${customer.email || 'Not captured'}</span></div>
+              <div class="admin-row"><span class="label">Instagram / WhatsApp</span><span class="value">${customer.handle || 'Not captured'}</span></div>
+              <div class="admin-row"><span class="label">Notes</span><span class="value">${customer.notes || 'None'}</span></div>
+              <p class="text-dim" style="font-size:0.78rem; margin-top:0.75rem;">Team action: ${order.next_team_action || 'Review design and contact customer manually.'}</p>
+            </div>
+
             <!-- Story Card -->
             <div class="admin-section">
               <h3>Story Card Text</h3>
@@ -163,11 +198,17 @@
               </div>
             </div>
 
+            <!-- Lead Queue -->
+            <div class="admin-section">
+              <h3>Lead Request Queue</h3>
+              ${leadRows || '<p class="text-dim" style="font-size:0.82rem;">No saved lead requests yet.</p>'}
+            </div>
+
             <!-- Developer Payload -->
             <details class="admin-section developer-payload">
               <summary>Developer payload · simulated Shopify draft order</summary>
               <p class="text-dim" style="font-size:0.78rem; margin:0.75rem 0 1rem;">Hidden by default so the order page stays customer-facing. Use this only for implementation handoff.</p>
-              <div class="admin-json">${JSON.stringify(shopifyPayload, null, 2)}</div>
+              <div class="admin-json">${JSON.stringify({ shopifyPayload, leadRequestPayload }, null, 2)}</div>
             </details>
           </div>
         </div>
@@ -186,13 +227,13 @@
       renderBracelet(braceletEl, order.stones, { width: 350, height: 240, beadSize: 17, animated: false, completed: true, productMode: true });
 
       // Store the payload for copy
-      window._shopifyPayload = JSON.stringify(shopifyPayload, null, 2);
+      window._shopifyPayload = JSON.stringify({ shopifyPayload, leadRequestPayload }, null, 2);
       window._currentOrderDesignId = order.design_id;
     }
 
     function saveDesignRequest() {
       const id = window._currentOrderDesignId || 'this bracelet';
-      alert(`Saved ${id} as a prototype request. In the live store, this button will continue to checkout or send the design to a jewelry specialist.`);
+      alert(`Saved ${id}. If this page includes customer contact, it is now visible in the Lead Request Queue. In the live store, this action will sync to CRM/Shopify.`);
     }
 
     function copyPayload() {

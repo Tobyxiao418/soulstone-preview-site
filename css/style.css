@@ -4522,3 +4522,88 @@ body {
   content: ' · choose the exact mix';
   color: rgba(226,198,151,0.72);
 }
+/*** P0 lead / order intake: static beta commercial loop ***/
+.lead-intake-card,
+.lead-status-banner {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-warm);
+  border-radius: 20px;
+  background: rgba(200, 168, 124, 0.07);
+}
+
+.lead-intake-card h3 {
+  margin: 0.25rem 0;
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
+  font-weight: 500;
+}
+
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.lead-form-grid label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lead-form-grid input,
+.lead-form-grid textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 248, 238, 0.12);
+  border-radius: 12px;
+  background: rgba(8, 7, 6, 0.45);
+  color: var(--color-text);
+  padding: 0.75rem 0.8rem;
+  font: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  outline: none;
+}
+
+.lead-form-grid textarea,
+.lead-form-grid label:last-child { grid-column: 1 / -1; }
+
+.lead-form-grid input:focus,
+.lead-form-grid textarea:focus {
+  border-color: var(--color-accent-light);
+  box-shadow: 0 0 0 3px rgba(200, 168, 124, 0.12);
+}
+
+.lead-status-banner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lead-status-banner strong { color: var(--color-accent-light); }
+.lead-status-banner span { color: var(--color-text-muted); font-size: 0.84rem; }
+
+.lead-request-row {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lead-request-row.active { color: var(--color-accent-light); }
+.lead-request-row div { display: flex; justify-content: space-between; gap: 0.75rem; }
+.lead-request-row span,
+.lead-request-row small { color: var(--color-text-dim); font-size: 0.78rem; }
+
+@media (max-width: 720px) {
+  .lead-form-grid { grid-template-columns: 1fr; }
+  .lead-status-banner,
+  .lead-request-row div { align-items: flex-start; flex-direction: column; }
+}

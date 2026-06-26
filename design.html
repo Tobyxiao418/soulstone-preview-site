@@ -743,7 +743,7 @@
                 <span class="checkout-price-label">Made to order</span>
                 <strong>$${payload.total_price.toFixed(2)}</strong>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="viewInAdmin()">Save My Bracelet</button>
+              <button class="btn btn-primary btn-sm" onclick="saveLeadFromCheckout()">Request This Bracelet</button>
             </div>
             <div class="conversion-pill-row" aria-label="Order value highlights">
               <span>Finished preview</span>
@@ -776,6 +776,26 @@
           <p>${payload.story_card_text}</p>
           <small>${payload.design_poetry.cta}</small>
         </div>
+        <form id="lead-intake-form" class="lead-intake-card" onsubmit="event.preventDefault(); saveLeadFromCheckout();">
+          <p class="eyebrow">Private request</p>
+          <h3>Send this design to a SoulStone specialist</h3>
+          <p class="text-dim">Prototype mode: this saves a lead request locally for team review. No payment is processed.</p>
+          <div class="lead-form-grid">
+            <label> Name
+              <input id="lead-name" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+            </label>
+            <label> Email
+              <input id="lead-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+            </label>
+            <label> Instagram / WhatsApp
+              <input id="lead-handle" name="handle" type="text" placeholder="@handle or phone">
+            </label>
+            <label> Notes / gift deadline
+              <textarea id="lead-notes" name="notes" rows="3" placeholder="Wrist fit, gift date, color preference..."></textarea>
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit">Save Request for Team Review</button>
+        </form>
       `;
 
       const checkoutBracelet = document.getElementById('checkout-bracelet');
@@ -786,6 +806,41 @@
 
     function closeCheckout() {
       document.getElementById('checkout-modal').style.display = 'none';
+    }
+
+    function collectLeadContact() {
+      const form = document.getElementById('lead-intake-form');
+      if (!form) return null;
+      return {
+        name: document.getElementById('lead-name')?.value.trim() || '',
+        email: document.getElementById('lead-email')?.value.trim() || '',
+        handle: document.getElementById('lead-handle')?.value.trim() || '',
+        notes: document.getElementById('lead-notes')?.value.trim() || '',
+        source: 'design_studio_p0_lead_intake',
+        submitted_at: new Date().toISOString(),
+      };
+    }
+
+    function saveLeadFromCheckout() {
+      const payload = getOrderPayload();
+      const customer = collectLeadContact();
+      if (!customer || !customer.name || !customer.email) {
+        alert('Please add your name and email so the team can follow up.');
+        return;
+      }
+      const request = {
+        ...payload,
+        customer_request: customer,
+        status: 'NEW_LEAD_REQUEST',
+        next_team_action: 'Review BOM, confirm price/production feasibility, then contact customer manually.',
+      };
+      localStorage.setItem('soulstone_last_order', JSON.stringify(request));
+      const existing = JSON.parse(localStorage.getItem('soulstone_lead_requests') || '[]');
+      const deduped = existing.filter(item => item.design_id !== request.design_id);
+      deduped.unshift(request);
+      localStorage.setItem('soulstone_lead_requests', JSON.stringify(deduped.slice(0, 25)));
+      closeCheckout();
+      window.location.href = 'admin.html?lead=saved';
     }
 
     function viewInAdmin() {

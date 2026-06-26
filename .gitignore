@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+dist/
+build/
+.cache/
+*.log
+*.tmp
+*.bak_*
+.env
+.env.*
+!.env.example
