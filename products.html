@@ -45,7 +45,17 @@
         customer: 'For bedtime rituals, anxiety-reset gifts, quiet focus and emotional recovery.',
         image: 'assets/generated/image2_hero_v2/soulstone_hero_v2_multistrand_cord.png',
         promise: 'A softer blue-green bracelet built around calm, breath and ritual.',
-        shopifyStatus: 'Shopify product page ready after final BOM and price confirmation.'
+        shopifyStatus: 'Shopify product page ready after final BOM and price confirmation.',
+        handle: 'calm-ocean-bracelet',
+        shortDescription: 'A made-to-order blue-green crystal and pearl bracelet for quiet focus, bedtime rituals and emotional reset.',
+        bullets: ['Aquamarine and moonstone-led calm palette', 'Freshwater pearl and silver accents', 'Best for self-soothing, sleep rituals and thoughtful gifts'],
+        faq: [
+          ['Who is this for?', 'Someone who wants a softer everyday bracelet for calm, breath, sleep, focus or emotional reset.'],
+          ['Can I change the size?', 'Yes. The live Shopify version should offer wrist size options; custom sizing should be confirmed before production.'],
+          ['Will every bracelet look identical?', 'No. Natural stone tone, pearl shape and inclusions vary slightly, which is part of the one-of-one feel.']
+        ],
+        seoTitle: 'Calm Ocean Bracelet — Custom Crystal & Pearl Bracelet',
+        seoDescription: 'A made-to-order aquamarine, moonstone and pearl bracelet designed around calm, focus and gentle daily ritual.'
       },
       {
         anchor: 'soft-love-pearl',
@@ -56,7 +66,17 @@
         customer: 'For birthdays, friendship gifts, self-love, apology gifts and tender personal milestones.',
         image: 'assets/generated/image2_system_upgrade/soulstone_system_gift_diy_box.png',
         promise: 'Rose quartz, moonstone and pearl softness for a gift that feels personal.',
-        shopifyStatus: 'Needs final packaging photo and gift-card wording before formal launch.'
+        shopifyStatus: 'Needs final packaging photo and gift-card wording before formal launch.',
+        handle: 'soft-love-pearl-bracelet',
+        shortDescription: 'A tender rose quartz, moonstone and pearl bracelet designed for self-love, birthdays and meaningful gifting.',
+        bullets: ['Rose quartz and moonstone emotional softness', 'Freshwater pearl and silver charm details', 'Strongest fit for birthday, friendship and self-care gifts'],
+        faq: [
+          ['Is this good as a gift?', 'Yes. This is the most gift-oriented launch preset and should ship with an Energy Story Card.'],
+          ['Can I add a gift note?', 'The Shopify version should include a gift note or customer note field before checkout.'],
+          ['Is the pearl shape consistent?', 'Freshwater pearls naturally vary; the product page should explain this clearly.']
+        ],
+        seoTitle: 'Soft Love Pearl Bracelet — Rose Quartz & Pearl Gift Bracelet',
+        seoDescription: 'A made-to-order rose quartz, moonstone and freshwater pearl bracelet for self-love, friendship gifts and tender milestones.'
       },
       {
         anchor: 'grounded-protection',
@@ -67,7 +87,17 @@
         customer: 'For new chapters, commuting, boundary-setting, work transitions and protective daily wear.',
         image: 'assets/generated/image2_hero_v2/soulstone_hero_v2_chunky_lapis_pearl.png',
         promise: 'A darker statement piece with lapis, smoky quartz, obsidian and silver details.',
-        shopifyStatus: 'Needs physical material feasibility confirmation for chunky lapis size and cord fit.'
+        shopifyStatus: 'Needs physical material feasibility confirmation for chunky lapis size and cord fit.',
+        handle: 'grounded-protection-bracelet',
+        shortDescription: 'A darker statement bracelet with lapis, smoky quartz, obsidian and silver details for boundaries and daily protection.',
+        bullets: ['Lapis, smoky quartz and obsidian grounding palette', 'Silver spacing and charm structure', 'Best for new chapters, commuting and boundary-setting'],
+        faq: [
+          ['Is this the boldest launch preset?', 'Yes. This is the strongest visual statement among the first three products.'],
+          ['Why is production time longer?', 'Chunky stones and cord fit need extra review before production.'],
+          ['Can the color be made softer?', 'Yes, but softer variants should be treated as custom requests until inventory and BOM are confirmed.']
+        ],
+        seoTitle: 'Grounded Protection Bracelet — Lapis, Obsidian & Smoky Quartz',
+        seoDescription: 'A made-to-order protection-inspired bracelet with lapis, smoky quartz, obsidian, silver accents and a darker daily-wear look.'
       }
     ];
 
@@ -106,11 +136,18 @@
                 <small>Current raw material formula preview: $${productPrice(stones)} before packaging, labor, ad margin and platform fees.</small>
               </div>
               <p>${item.customer}</p>
+              <p class="product-long-copy">${item.shortDescription}</p>
+              <ul class="product-copy-bullets">${item.bullets.map(bullet => `<li>${bullet}</li>`).join('')}</ul>
               <ul class="material-bom-list">${materialSummary(stones)}</ul>
               <div class="launch-meta-grid">
                 <div><strong>Production</strong><span>${item.production}</span></div>
                 <div><strong>Shopify status</strong><span>${item.shopifyStatus}</span></div>
                 <div><strong>Policy note</strong><span>Symbolic jewelry only; no medical, financial or guaranteed outcomes.</span></div>
+                <div><strong>Shopify handle</strong><span>${item.handle}</span></div>
+                <div><strong>SEO title</strong><span>${item.seoTitle}</span></div>
+              </div>
+              <div class="product-faq-block">
+                ${item.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}
               </div>
               <div class="hero-actions">
                 <a class="btn btn-primary" href="${designUrl}">Customize this preset</a>

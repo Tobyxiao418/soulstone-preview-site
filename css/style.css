@@ -4785,3 +4785,36 @@ body {
   .material-bom-list em,
   .launch-meta-grid span { text-align: left; }
 }
+
+/*** Shopify migration product copy blocks ***/
+.product-long-copy {
+  color: var(--color-text-muted);
+  margin: 0.75rem 0 0;
+}
+
+.product-copy-bullets {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0;
+  padding-left: 1.1rem;
+  color: var(--color-cream-muted);
+}
+
+.product-copy-bullets li::marker { color: var(--color-accent); }
+
+.product-faq-block {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1rem 0 1.25rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-faq-block details {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-faq-block details:last-child { border-bottom: none; }
+.product-faq-block summary { cursor: pointer; color: var(--color-accent-light); font-weight: 600; }
+.product-faq-block p { margin-top: 0.45rem; color: var(--color-text-muted); font-size: 0.88rem; }
