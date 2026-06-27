@@ -7,9 +7,6 @@ function renderNav(activePage) {
     { href: 'design.html', labelKey: 'nav_design', id: 'design' },
     { href: 'quiz.html', labelKey: 'nav_quiz', id: 'quiz' },
     { href: 'stones.html', labelKey: 'nav_stones', id: 'stones' },
-    { href: 'policies.html', labelKey: 'nav_policies', id: 'policies' },
-    { href: 'trust.html', labelKey: 'nav_trust', id: 'trust' },
-    { href: 'admin.html', labelKey: 'nav_admin', id: 'admin' },
   ];
 
   const links = pages.map(p =>

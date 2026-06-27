@@ -33,8 +33,9 @@ function renderBracelet(containerEl, stoneIds, options = {}) {
           </filter>
         </defs>
         <ellipse cx="${cx}" cy="${cy + 24}" rx="${radius * 0.88}" ry="${radius * 0.28}" fill="#000" opacity="0.18" filter="url(#empty-soft-shadow)"/>
-        <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#4a4138" stroke-width="1" stroke-dasharray="4 6" opacity="0.9"/>
-        <text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" fill="#9a8f82" font-family="'Cormorant Garamond', serif" font-size="14" font-style="italic">Select stones to begin</text>
+        <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="#5a4b39" stroke-width="1.4" stroke-dasharray="5 7" opacity="0.95"/>
+        <text x="${cx}" y="${cy - 10}" text-anchor="middle" fill="#dcc4a0" font-family="'Cormorant Garamond', serif" font-size="18" font-style="italic">Your bracelet is empty</text>
+        <text x="${cx}" y="${cy + 18}" text-anchor="middle" fill="#c9beb0" font-family="Inter, sans-serif" font-size="11" letter-spacing="0.08em">CHOOSE YOUR FIRST MATERIAL</text>
       </svg>`;
     return;
   }

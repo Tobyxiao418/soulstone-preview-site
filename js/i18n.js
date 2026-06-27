@@ -34,14 +34,14 @@ const I18N = {
     admin_eyebrow: 'Internal Preview', admin_title: 'Order Preview', admin_details: 'Design Details', admin_bom: 'Bill of Materials', admin_story: 'Story Card Text', admin_preview: 'Bracelet Preview', admin_sequence: 'Bead Sequence', admin_shopify: 'Simulated Shopify Draft Order', admin_back: 'Back to Design Studio', admin_copy: 'Copy JSON Payload', admin_empty: 'Complete a design to generate an order preview.', admin_proto: 'Prototype mode — no live Shopify connection'
   },
   zh: {
-    nav_home: '首页', nav_products: '首发产品', nav_design: '设计工作室', nav_quiz: '能量测试', nav_stones: '宝石库', nav_policies: '政策草案', nav_trust: '信任说明', nav_admin: '订单预览',
+    nav_home: '首页', nav_products: '首发系列', nav_design: '设计工作室', nav_quiz: '能量测试', nav_stones: '宝石指南', nav_policies: '政策', nav_trust: '信任', nav_admin: '订单预览',
     logo_tagline: '设计你的能量', lang_toggle: 'EN',
     footer_disclaimer: '仅用于象征意义与个人灵感。天然石材的颜色和纹理会自然变化。<br>SoulStone 不宣称任何医疗、治疗或财务收益。',
     footer_tagline: '设计你的能量 — 手作水晶与珍珠手链', footer_proto: 'MVP 原型 · 非正式生产版本',
 
     home_eyebrow: '手作水晶与珍珠手链', home_h1: '设计你的<span class="text-accent">能量</span>', home_subtitle: '选择你的意图，佩戴你的仪式感。',
-    home_body: '每一条手链都由天然水晶、淡水珍珠和 925 银色细节组成——由你选择，由手工完成。每一条都不完全相同。',
-    home_cta_design: '打开设计工作室', home_cta_quiz: '找到你的能量', home_seek: '你正在寻找哪种能量？',
+    home_body: '天然晶石、淡水珍珠与 925 银，围绕你的意图选择、由你排列，并由手工完成。',
+    home_cta_design: '定制我的能量手链', home_cta_quiz: '找到你的能量', home_seek: '你正在寻找哪种能量？',
     home_process: '定制流程', home_steps_title: '三步完成你的手链',
     home_step1_title: '设定你的意图', home_step1_body: '爱、丰盛、平静、守护或清晰——先选择你想随身携带的能量。',
     home_step2_title: '选择你的材料系统', home_step2_body: '选择大颗异形石、巴洛克珍珠、银色吊坠、绳子和打结方式，看着你的组合逐步成形。',

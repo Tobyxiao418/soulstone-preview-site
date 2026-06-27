@@ -13,7 +13,7 @@
     <div class="studio-canvas">
       <div class="studio-top-note">
         <span>DIY material-system preview</span>
-        <strong>Every stone, charm and cord reflects your current design</strong>
+        <strong>Every material updates the preview</strong>
       </div>
       <figure class="studio-material-photo">
         <img src="assets/generated/image2_threaded/soulstone_threaded_design_studio_atelier.png" alt="Macro crystal, pearl, and silver material reference">
@@ -41,14 +41,14 @@
       <div class="studio-bottom-cta">
         <div>
           <span class="mini-label">Current direction</span>
-          <strong id="design-direction">Choose stones to begin</strong>
+          <strong id="design-direction">Choose your first material to begin</strong>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Preview finished piece</button>
+        <button class="btn btn-primary btn-sm" id="primary-design-action" onclick="focusMaterials()">Choose materials</button>
       </div>
       <div class="studio-operation-strip" aria-label="Design operations">
-        <span>Choose materials</span>
-        <span>Drag stones / charms to reorder</span>
-        <span>Switch scale and construction</span>
+        <span>1 Choose intention</span>
+        <span>2 Add materials</span>
+        <span>3 Review finished piece</span>
       </div>
     </div>
 
@@ -68,13 +68,13 @@
 
       <!-- Material Scale -->
       <div class="panel-section bead-size-section">
-        <div class="panel-label">Material Scale</div>
+        <div class="panel-label">Bead size / material scale</div>
         <div class="bead-size-control" aria-label="Adjust material scale">
           <button class="btn btn-secondary btn-sm" onclick="adjustBeadSize(-2)">−</button>
           <strong id="bead-size-control-label">8mm</strong>
           <button class="btn btn-secondary btn-sm" onclick="adjustBeadSize(2)">+</button>
         </div>
-        <p class="control-hint">Smaller materials feel delicate; larger chunks create the statement style in the reference direction.</p>
+        <p class="control-hint">Global bead diameter. Smaller feels delicate; larger chunks create the statement bracelet style.</p>
       </div>
 
       <!-- Guided shopping paths -->
@@ -151,11 +151,11 @@
 
   <div class="mobile-sticky-review" aria-label="Mobile design review shortcut">
     <div>
-      <span class="mini-label">SoulStone Studio</span>
-      <strong id="mobile-review-summary">Start your design</strong>
-    </div>
-    <button class="btn btn-primary btn-sm" onclick="simulateCheckout()">Review</button>
-  </div>
+      <span class="mini-label">Starting price · $12</span>
+      <strong id="mobile-review-summary">Choose materials</strong>
+      </div>
+      <button class="btn btn-primary btn-sm" id="mobile-primary-action" onclick="focusMaterials()">Start</button>
+      </div>
 
   <!-- Checkout Modal -->
   <div id="checkout-modal" class="modal-overlay" style="display:none;">
@@ -440,6 +440,16 @@
       renderAll({ action: 'clear' });
     }
 
+    function focusMaterials() {
+      const picker = document.getElementById('stone-picker');
+      const search = document.getElementById('stone-search');
+      const target = search || picker;
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (search) setTimeout(() => search.focus({ preventScroll: true }), 350);
+      }
+    }
+
     function image2ProductPhotoForStones(stones, intention) {
       const imageMap = {
         'ocean-calm': 'assets/generated/image2_threaded/soulstone_threaded_hero_ocean_calm.png',
@@ -537,14 +547,24 @@
       const progressLabel = document.getElementById('design-progress-label');
       const direction = document.getElementById('design-direction');
       const mobileSummary = document.getElementById('mobile-review-summary');
+      const primaryAction = document.getElementById('primary-design-action');
+      const mobileAction = document.getElementById('mobile-primary-action');
       if (progressFill) progressFill.style.width = `${progress}%`;
       if (progressLabel) progressLabel.textContent = isCompleteProduct ? 'Ready for order review' : `${progress}% complete`;
       if (direction) {
         const intent = selectedIntention ? localizeIntent(selectedIntention) : 'Custom ritual';
-        direction.textContent = currentStones.length ? `${intent} · ${currentStones.length} materials · $${price.toFixed(2)}` : 'Choose materials to begin';
+        direction.textContent = currentStones.length ? `${intent} · ${currentStones.length} materials · $${price.toFixed(2)}` : 'Choose your first material to begin';
       }
       if (mobileSummary) {
-        mobileSummary.textContent = currentStones.length ? `${currentStones.length} materials · $${price.toFixed(2)}` : 'Start your design';
+        mobileSummary.textContent = currentStones.length ? `${currentStones.length} materials · $${price.toFixed(2)}` : 'Choose materials';
+      }
+      if (primaryAction) {
+        primaryAction.textContent = isCompleteProduct ? 'Review finished piece' : (currentStones.length ? 'Continue adding materials' : 'Choose materials');
+        primaryAction.onclick = isCompleteProduct ? simulateCheckout : focusMaterials;
+      }
+      if (mobileAction) {
+        mobileAction.textContent = isCompleteProduct ? 'Review' : 'Start';
+        mobileAction.onclick = isCompleteProduct ? simulateCheckout : focusMaterials;
       }
 
       renderDecisionHelper(isCompleteProduct, progress, price);
