@@ -238,7 +238,7 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
     const front = Math.sin(angle) > 0;
     const side = Math.abs(Math.cos(angle));
     const materialType = stone.type || (stone.isAccent ? 'hardware' : 'stone');
-    const baseR = materialType === 'cord' ? beadSize * 0.44 : materialType === 'hardware' ? beadSize * 0.62 : stone.texture === 'chunk' ? beadSize * 1.42 : stone.texture === 'baroque' ? beadSize * 1.16 : beadSize * 1.24;
+    const baseR = materialType === 'cord' ? beadSize * 0.42 : materialType === 'hardware' ? beadSize * 0.60 : stone.texture === 'chunk' ? beadSize * 1.24 : stone.texture === 'baroque' ? beadSize * 1.14 : beadSize * 1.22;
     const depthScale = front ? 1.20 : 0.98;
     const featureScale = (!stone.isAccent && (i % 5 === 0 || stone.texture === 'irregular')) ? 1.07 : 1;
     return {
@@ -304,7 +304,7 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
   svg += `<path class="threaded-cord" d="M ${cx - rx * 0.96} ${cy + 4} C ${cx - rx * 0.48} ${cy - ry * 1.04}, ${cx + rx * 0.48} ${cy - ry * 1.04}, ${cx + rx * 0.96} ${cy + 4} C ${cx + rx * 0.56} ${cy + ry * 1.02}, ${cx - rx * 0.56} ${cy + ry * 1.02}, ${cx - rx * 0.96} ${cy + 4}" fill="none" stroke="#efe6d6" stroke-width="3.1" stroke-linecap="round" stroke-opacity="0.36"/>`;
 
   items.forEach((item, i) => {
-    const { id, x, y, r, stone, rotate, opacity, front, originalIndex } = item;
+    const { id, x, y, r, stone, rotate, opacity, front, originalIndex, angle } = item;
     const clipId = `finished-clip-${i}-${id}`;
     const img = beadCutPath(id);
     const delay = animated ? `style="animation: beadPop 0.42s cubic-bezier(.2,.9,.2,1.2) ${i * 0.016}s both"` : '';
@@ -313,6 +313,14 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
     const cord = stone.type === 'cord' || stone.texture === 'cord';
     const chunky = stone.texture === 'chunk' || stone.scale === 'hero';
     const irregular = stone.texture === 'irregular' || chunky;
+    const tangent = angle + Math.PI / 2;
+    const hx = Math.cos(tangent);
+    const hy = Math.sin(tangent);
+    const holeLength = r * (chunky ? 0.36 : pearl ? 0.42 : 0.48);
+    const holeStroke = Math.max(0.8, r * 0.055);
+    const threadCue = () => (cord || metal) ? '' : `
+      <path d="M ${x - hx * holeLength} ${y - hy * holeLength} L ${x + hx * holeLength} ${y + hy * holeLength}" stroke="#21160f" stroke-opacity="${front ? 0.34 : 0.22}" stroke-width="${holeStroke}" stroke-linecap="round"/>
+      <path d="M ${x - hx * holeLength * 0.84} ${y - hy * holeLength * 0.84} L ${x + hx * holeLength * 0.84} ${y + hy * holeLength * 0.84}" stroke="#f5ead6" stroke-opacity="${front ? 0.13 : 0.08}" stroke-width="${Math.max(0.45, holeStroke * 0.45)}" stroke-linecap="round"/>`;
     svg += `<g class="finished-product-bead draggable-product-bead" data-index="${originalIndex}" opacity="${opacity}" ${delay}>`;
     svg += `<ellipse cx="${x}" cy="${y + r * 0.42}" rx="${r * 0.82}" ry="${r * 0.34}" fill="#000" opacity="${front ? 0.28 : 0.18}"/>`;
     if (cord) {
@@ -333,19 +341,22 @@ function renderRealProductBracelet(containerEl, stoneIds, options = {}) {
       svg += `<clipPath id="${clipId}"><ellipse cx="${x}" cy="${y}" rx="${r * 1.09}" ry="${r * 0.84}" transform="rotate(${rotate} ${x} ${y})"/></clipPath>`;
       svg += `<image href="${img}" x="${x - r * 1.48}" y="${y - r * 1.48}" width="${r * 2.96}" height="${r * 2.96}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.92"/>`;
       svg += `<ellipse cx="${x-r*.22}" cy="${y-r*.24}" rx="${r*.40}" ry="${r*.17}" fill="#fff8ec" opacity="0.31" transform="rotate(${rotate-22} ${x} ${y})"/>`;
+      svg += threadCue();
     } else if (irregular) {
       const chunkPath = chunky
-        ? `M ${x-r*1.08} ${y-r*.22} L ${x-r*.55} ${y-r*.92} L ${x+r*.46} ${y-r*.78} L ${x+r*1.02} ${y-r*.08} L ${x+r*.56} ${y+r*.82} L ${x-r*.42} ${y+r*.88} L ${x-r*1.02} ${y+r*.34} Z`
+        ? `M ${x-r*.96} ${y-r*.20} L ${x-r*.50} ${y-r*.78} L ${x+r*.42} ${y-r*.66} L ${x+r*.90} ${y-r*.07} L ${x+r*.50} ${y+r*.70} L ${x-r*.38} ${y+r*.76} L ${x-r*.90} ${y+r*.30} Z`
         : `M ${x-r*.80} ${y-r*.34} C ${x-r*.42} ${y-r*.94}, ${x+r*.48} ${y-r*.82}, ${x+r*.82} ${y-r*.18} C ${x+r*.94} ${y+r*.44}, ${x+r*.18} ${y+r*.86}, ${x-r*.44} ${y+r*.72} C ${x-r*.98} ${y+r*.42}, ${x-r*1.02} ${y+r*.02}, ${x-r*.80} ${y-r*.34}`;
       svg += `<path d="${chunkPath}" fill="url(#finished-grad-${id})" filter="url(#finished-bead-shadow)" transform="rotate(${rotate} ${x} ${y})"/>`;
       svg += `<clipPath id="${clipId}"><path d="${chunkPath}" transform="rotate(${rotate} ${x} ${y})"/></clipPath>`;
       svg += `<image href="${img}" x="${x-r*1.45}" y="${y-r*1.45}" width="${r*2.9}" height="${r*2.9}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.94"/>`;
       svg += `<ellipse cx="${x-r*.25}" cy="${y-r*.36}" rx="${r*.32}" ry="${r*.13}" fill="#fff" opacity="0.22" transform="rotate(${rotate-25} ${x} ${y})"/>`;
+      svg += threadCue();
     } else {
       svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#finished-grad-${id})" filter="url(#finished-bead-shadow)"/>`;
       svg += `<clipPath id="${clipId}"><circle cx="${x}" cy="${y}" r="${r * 0.96}"/></clipPath>`;
       svg += `<image href="${img}" x="${x-r*1.35}" y="${y-r*1.35}" width="${r*2.7}" height="${r*2.7}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clipId})" opacity="0.93"/>`;
       svg += `<ellipse cx="${x-r*.28}" cy="${y-r*.38}" rx="${r*.29}" ry="${r*.12}" fill="#fff" opacity="0.28" transform="rotate(-28 ${x} ${y})"/>`;
+      svg += threadCue();
     }
     svg += `<circle cx="${x}" cy="${y}" r="${r * 0.92}" fill="none" stroke="#fff" stroke-opacity="0.10" stroke-width="0.8"/>`;
     svg += `</g>`;
