@@ -518,9 +518,12 @@
       // Bracelet SVG
       const canvas = document.getElementById('bracelet-canvas');
       const isCompleteProduct = currentStones.length >= designNeededCount();
-      const size = isCompleteProduct ? Math.min(canvas.offsetWidth, 660) : Math.min(canvas.offsetWidth, 360);
-      const renderHeight = isCompleteProduct ? Math.min(canvas.offsetHeight, 430) : size;
+      // Measure after the complete-state class is applied. Otherwise the renderer
+      // can stay stuck at the 380px workbench size and the finished bracelet reads
+      // like a small floating diagram instead of a product photograph.
       canvas.classList.toggle('is-complete', isCompleteProduct);
+      const size = isCompleteProduct ? Math.min(Math.max(canvas.offsetWidth, 560), 700) : Math.min(canvas.offsetWidth, 360);
+      const renderHeight = isCompleteProduct ? Math.min(Math.max(canvas.offsetHeight, 390), 470) : size;
       if (meta.action === 'add' || meta.action === 'complete') {
         canvas.classList.remove('stone-added');
         void canvas.offsetWidth;

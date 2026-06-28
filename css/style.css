@@ -4394,10 +4394,7 @@ body {
 }
 
 .bracelet-container.is-complete::after {
-  display: block !important;
-  bottom: 0.35rem;
-  content: 'Drag beads to reorder exact sequence';
-  opacity: 0.78;
+  display: none !important;
 }
 
 .luxe-finished-svg rect[fill="#17110d"] {
@@ -4406,12 +4403,12 @@ body {
 }
 
 .threaded-cord:not(.threaded-cord-shadow) {
-  stroke-opacity: 0.44;
-  stroke-width: 3.4px;
+  stroke-opacity: 0.32;
+  stroke-width: 2.8px;
 }
 
 .threaded-cord-shadow {
-  stroke-opacity: 0.20;
+  stroke-opacity: 0.16;
 }
 
 .checkout-bracelet:not(.has-product-photo) {
@@ -4424,6 +4421,62 @@ body {
   border: 1px solid rgba(255,246,228,0.075);
   border-radius: 18px;
   padding: 0.85rem;
+}
+
+/* P1.2 mobile containment: avoid right-edge clipping in Feishu/mobile screenshots. */
+html,
+body,
+.app-shell,
+.studio-layout,
+.studio-canvas,
+.studio-panel {
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.studio-bottom-cta,
+.studio-preview-kicker,
+.design-path-grid,
+.chip-group,
+.stone-filter-row {
+  max-width: 100%;
+}
+
+.studio-bottom-cta {
+  min-width: 0;
+}
+
+.studio-bottom-cta > div:first-child,
+.studio-preview-kicker > div {
+  min-width: 0;
+}
+
+.studio-bottom-cta small,
+.studio-preview-kicker small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .nav-inner { padding-inline: 0.85rem; }
+  .lang-toggle { flex: 0 0 auto; }
+  .studio-preview-kicker {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+  .studio-bottom-cta {
+    border-radius: 22px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .studio-bottom-cta .btn {
+    width: 100%;
+  }
 }
 
 .order-summary-compact,
